@@ -1,0 +1,1988 @@
+openapi: 3.0.1
+info:
+  title: Transfer Booking API
+  description: |
+    # APItude Transfer Booking API
+    
+    APItude also includes now the ability to book transfers. This API will provide you with availability for transfer services and allow you to distribute those not only through the websites but also is thought to support mobile and tablets.
+    
+    APItude for transfers API is designed to provide Hotelbeds Group clients with a set of API calls to:
+    
+    
+    * Enable the construction or creation of a complete transfer website or mobile application (app)
+    * Integrate transfer services into existing systems both internal and external.
+    * Integrate transfers contents for transfers into a common CMS for all the products being distributed.
+    
+    **Transfer Booking API** provides all the needed calls (operations) to develop your booking funnel, confirm a booking and obtain the relevant information for a customer to enjoy the transfer service that he or she bought.
+    
+    To obtain and cache the static content you can use [Transfers Cache API](), an API designed to return all the static information needed to operate the Transfers BookingAPI as quickly and simple as possible.
+  termsOfService: https://developer.hotelbeds.com/API_Terms_of_Use
+  contact:
+    name: BTB Support
+    url: 'https://developer.hotelbeds.com'
+    email: integrations.btb@hotelbeds.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: '1.0'
+externalDocs:
+  description: Find out more about APItude
+  url: https://developer.hotelbeds.com
+servers:
+- url: 'https://api.test.hotelbeds.com/transfor-api/1.0'
+  variables: {}
+tags:
+- name: Availability
+  description: Availability Controller
+- name: Booking
+  description: Booking Controller
+paths:
+  /availability/routes/{language}/{adults}/{children}/{infants}:
+    post:
+      tags:
+      - Availability
+      summary: Availability routes
+      description: Returns a Response with the RQ, a list of routes with available
+        transfer services
+      operationId: availability_2
+      parameters:
+      - name: language
+        in: path
+        description: language iso code of response
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: adults
+        in: path
+        description: number of adults
+        required: true
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: children
+        in: path
+        description: number of children
+        required: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: infants
+        in: path
+        description: number of infants
+        required: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: vehicle
+        in: query
+        description: Used for filtering results. Availability routes can be filtered
+          by vehicle.
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Used for filtering results. Availability routes can be filtered
+          by type.
+        schema:
+          type: string
+      - name: category
+        in: query
+        description: Used for filtering results. Availability routes can be filtered
+          by category.
+        schema:
+          type: string
+      - name: allowPartialResults
+        in: query
+        description: Show the results of the routes including no results or exception
+          errors
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        description: routeRequests
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/RouteRequest'
+        required: true
+      responses:
+        200:
+          description: Availability OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/AvailabilityResponse'
+        204:
+          description: No availability
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+      x-codegen-request-body-name: routeRequests
+  ? /availability/{language}/from/{fromType}/{fromCode}/to/{toType}/{toCode}/{outbound}/{adults}/{children}/{infants}
+  : get:
+      tags:
+      - Availability
+      summary: Availability without comeBack parameter
+      description: Returns a Response with the RQ, a list of comeBack services and
+        a list of departure services
+      operationId: availability
+      parameters:
+      - name: language
+        in: path
+        description: language iso code of response
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: fromType
+        in: path
+        description: origin transfer point type
+        required: true
+        schema:
+          type: string
+          default: IATA
+          enum:
+          - GIATA
+          - ATLAS
+          - IATA
+          - PORT
+          - STATION
+          - GPS
+      - name: fromCode
+        in: path
+        description: origin code
+        required: true
+        schema:
+          type: string
+          default: PMI
+      - name: toType
+        in: path
+        description: destination transfer point type
+        required: true
+        schema:
+          type: string
+          default: ATLAS
+          enum:
+          - GIATA
+          - ATLAS
+          - IATA
+          - PORT
+          - STATION
+          - GPS
+      - name: toCode
+        in: path
+        description: destination code
+        required: true
+        schema:
+          type: string
+          default: "1523"
+      - name: outbound
+        in: path
+        description: departure datetime
+        required: true
+        schema:
+          type: string
+          default: yyyy-MM-ddThh:mm:ss
+      - name: adults
+        in: path
+        description: number of adults
+        required: true
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: children
+        in: path
+        description: number of children
+        required: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: infants
+        in: path
+        description: number of infants
+        required: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        200:
+          description: Availability OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/AvailabilityResponse'
+        204:
+          description: No availability
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  ? /availability/{language}/from/{fromType}/{fromCode}/to/{toType}/{toCode}/{outbound}/{inbound}/{adults}/{children}/{infants}
+  : get:
+      tags:
+      - Availability
+      summary: Availability with comeBack parameter
+      description: Returns a Response with the RQ, a list of comeBack services and
+        a list of departure services
+      operationId: availability_1
+      parameters:
+      - name: language
+        in: path
+        description: language iso code of response
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: fromType
+        in: path
+        description: origin transfer point type
+        required: true
+        schema:
+          type: string
+          default: IATA
+          enum:
+          - GIATA
+          - ATLAS
+          - IATA
+          - PORT
+          - STATION
+          - GPS
+      - name: fromCode
+        in: path
+        description: origin code
+        required: true
+        schema:
+          type: string
+          default: PMI
+      - name: toType
+        in: path
+        description: destination transfer point type
+        required: true
+        schema:
+          type: string
+          default: ATLAS
+          enum:
+          - GIATA
+          - ATLAS
+          - IATA
+          - PORT
+          - STATION
+          - GPS
+      - name: toCode
+        in: path
+        description: destination code
+        required: true
+        schema:
+          type: string
+          default: "1523"
+      - name: outbound
+        in: path
+        description: departure datetime
+        required: true
+        schema:
+          type: string
+          default: yyyy-MM-ddThh:mm:ss
+      - name: inbound
+        in: path
+        description: return datetime
+        required: true
+        schema:
+          type: string
+          default: yyyy-MM-ddThh:mm:ss
+      - name: adults
+        in: path
+        description: number of adults
+        required: true
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: children
+        in: path
+        description: number of children
+        required: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: infants
+        in: path
+        description: number of infants
+        required: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        200:
+          description: Availability OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/AvailabilityResponse'
+        204:
+          description: No availability
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /booking:
+    post:
+      tags:
+      - Booking
+      summary: Confirm transfers bookings
+      description: The confirm endpoint returns a BookingResponseDTO object
+      operationId: booking_2
+      parameters:
+      - name: X-Platform-ID
+        in: header
+        description: X-Platform-ID
+        schema:
+          type: string
+      requestBody:
+        description: confirmRequestDTO
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/ConfirmRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        201:
+          description: Booking OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        400:
+          description: 'Bad request: Data validation error'
+          content: {}
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+      x-codegen-request-body-name: confirmRequestDTO
+  /booking/{language}/reference/{reference}:
+    get:
+      tags:
+      - Booking
+      summary: Get a bookings confirmed
+      description: The booking endpoint returns a BookingResponseDTO object
+      operationId: booking_4
+      parameters:
+      - name: language
+        in: path
+        description: language iso code of response
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: reference
+        in: path
+        description: reference
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Booking Details OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        204:
+          description: No availability
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+    delete:
+      tags:
+      - Booking
+      summary: Cancel transfers bookings
+      description: The cancel endpoint returns a BookingResponseDTO object
+      operationId: booking
+      parameters:
+      - name: language
+        in: path
+        description: language iso code of response
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: reference
+        in: path
+        description: reference
+        required: true
+        schema:
+          type: string
+      - name: simulation
+        in: query
+        description: simulation
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        201:
+          description: Booking Cancel OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        400:
+          description: 'Bad request: Data validation error'
+          content: {}
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /booking/{language}/reference/{reference}/id/{id}:
+    delete:
+      tags:
+      - Booking
+      summary: Modify transfers bookings
+      description: The modification endpoint returns a BookingResponseDTO object
+      operationId: booking_7
+      parameters:
+      - name: language
+        in: path
+        description: language iso code of response
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: reference
+        in: path
+        description: booking reference
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: transfer identifier
+        required: true
+        schema:
+          type: string
+      - name: simulation
+        in: query
+        description: simulation
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        201:
+          description: Booking Cancel OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        400:
+          description: 'Bad request: Data validation error'
+          content: {}
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /bookings:
+    post:
+      tags:
+      - Booking
+      summary: Confirm transfers bookings
+      description: The confirm endpoint returns a BookingResponseDTO object
+      operationId: booking_3
+      parameters:
+      - name: X-Platform-ID
+        in: header
+        description: X-Platform-ID
+        schema:
+          type: string
+      requestBody:
+        description: confirmRequestDTO
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/ConfirmRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        201:
+          description: Booking OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        400:
+          description: 'Bad request: Data validation error'
+          content: {}
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+      x-codegen-request-body-name: confirmRequestDTO
+  /bookings/{language}:
+    get:
+      tags:
+      - Booking
+      summary: Get a booking list
+      description: The booking endpoint returns a BookingListResponseDTO object
+      operationId: booking_6
+      parameters:
+      - name: language
+        in: path
+        description: language iso code of response
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: fromDate
+        in: query
+        description: fromDate
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        description: toDate
+        schema:
+          type: string
+      - name: dateType
+        in: query
+        description: dateType, possible values FROM_DATE, CREATION_DATE
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Used for pagination. Index of the item from which the list will
+          be generated in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: limit
+        in: query
+        description: Used for pagination. Number of items from the index indicated
+          by the offset parameter that will be included in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: agency
+        in: query
+        description: Used for filtering results. Bookings that belong to the agency
+          specified by the reference.
+        schema:
+          type: string
+      - name: surname
+        in: query
+        description: Used for filtering results. Bookings that were created by the
+          user specified by surname.
+        schema:
+          type: string
+      responses:
+        200:
+          description: Booking Details OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BookingListResponse'
+        204:
+          description: No availability
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /bookings/{language}/reference/{reference}:
+    get:
+      tags:
+      - Booking
+      summary: Get a bookings confirmed
+      description: The booking endpoint returns a BookingResponseDTO object
+      operationId: booking_5
+      parameters:
+      - name: language
+        in: path
+        description: language iso code of response
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: reference
+        in: path
+        description: reference
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Booking Details OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        204:
+          description: No availability
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+    delete:
+      tags:
+      - Booking
+      summary: Cancel transfers bookings
+      description: The cancel endpoint returns a BookingResponseDTO object
+      operationId: booking_1
+      parameters:
+      - name: language
+        in: path
+        description: language iso code of response
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: reference
+        in: path
+        description: reference
+        required: true
+        schema:
+          type: string
+      - name: simulation
+        in: query
+        description: simulation
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        201:
+          description: Booking Cancel OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        400:
+          description: 'Bad request: Data validation error'
+          content: {}
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /bookings/{language}/reference/{reference}/id/{id}:
+    delete:
+      tags:
+      - Booking
+      summary: Modify transfers bookings
+      description: The modification endpoint returns a BookingResponseDTO object
+      operationId: booking_8
+      parameters:
+      - name: language
+        in: path
+        description: language iso code of response
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: reference
+        in: path
+        description: booking reference
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: transfer identifier
+        required: true
+        schema:
+          type: string
+      - name: simulation
+        in: query
+        description: simulation
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        201:
+          description: Booking Cancel OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        400:
+          description: 'Bad request: Data validation error'
+          content: {}
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+components:
+  schemas:
+    AvailabilityRequest:
+      title: AvailabilityRequest
+      required:
+      - comeBack
+      - departure
+      - from
+      - language
+      - occupancy
+      - to
+      type: object
+      properties:
+        comeBack:
+          $ref: '#/components/schemas/TransferDateTime'
+        departure:
+          $ref: '#/components/schemas/TransferDateTime'
+        from:
+          $ref: '#/components/schemas/TransferPoint'
+        language:
+          type: string
+          description: Language
+        occupancy:
+          $ref: '#/components/schemas/Occupancy'
+        to:
+          $ref: '#/components/schemas/TransferPoint'
+      description: The Availability Request Object
+    AvailabilityResponse:
+      title: AvailabilityResponse
+      required:
+      - search
+      type: object
+      properties:
+        search:
+          $ref: '#/components/schemas/AvailabilityRequest'
+        services:
+          type: array
+          description: Inbound transfers list
+          items:
+            $ref: '#/components/schemas/TransferServiceAvail'
+      description: The Availability Response Object
+    AvailabilityRoutesRequest:
+      title: AvailabilityRoutesRequest
+      required:
+      - category
+      - language
+      - occupancy
+      - routes
+      - type
+      - vehicle
+      type: object
+      properties:
+        category:
+          type: string
+          description: Category
+        language:
+          type: string
+          description: Language
+        occupancy:
+          $ref: '#/components/schemas/Occupancy'
+        routes:
+          type: array
+          description: Routes
+          items:
+            $ref: '#/components/schemas/RouteRequestDTO'
+        type:
+          type: string
+          description: Type
+        vehicle:
+          type: string
+          description: Vehicle
+      description: The Availability Routes Request Object
+    AvailabilityRoutesResponse:
+      title: AvailabilityRoutesResponse
+      required:
+      - search
+      type: object
+      properties:
+        routes:
+          type: array
+          description: Routes list
+          items:
+            $ref: '#/components/schemas/Route'
+        search:
+          $ref: '#/components/schemas/AvailabilityRoutesRequest'
+      description: The Availability Routes Response Object
+    Booking:
+      title: Booking
+      required:
+      - creationDate
+      - currency
+      - holder
+      - invoiceCompany
+      - links
+      - pendingAmount
+      - reference
+      - status
+      - supplier
+      - totalAmount
+      - totalNetAmount
+      - transfers
+      type: object
+      properties:
+        bookingFileId:
+          type: string
+          description: Booking file id
+        clientReference:
+          type: string
+          description: Client reference
+        creationDate:
+          type: string
+          description: Creation date
+        currency:
+          type: string
+          description: Currency code
+        holder:
+          $ref: '#/components/schemas/Pax'
+        invoiceCompany:
+          $ref: '#/components/schemas/InvoiceCompany'
+        links:
+          type: array
+          description: Links
+          items:
+            $ref: '#/components/schemas/Link'
+        modificationsPolicies:
+          $ref: '#/components/schemas/ModificationsPolicies'
+        pendingAmount:
+          type: number
+          description: Pending amount import
+        reference:
+          type: string
+          description: Booking reference
+        remark:
+          type: string
+          description: Remark
+        status:
+          type: string
+          description: Booking status
+          enum:
+          - CONFIRMED
+          - CANCELLED
+          - MODIFIED
+        supplier:
+          $ref: '#/components/schemas/InvoiceCompany'
+        totalAmount:
+          type: number
+          description: TotalAmount import
+        totalNetAmount:
+          type: number
+          description: TotalNet import
+        transfers:
+          type: array
+          description: Transfer details confirmed
+          items:
+            $ref: '#/components/schemas/TransferServiceBookingCancel'
+      description: Booking details
+    BookingListResponse:
+      title: BookingListResponse
+      required:
+      - bookings
+      type: object
+      properties:
+        bookings:
+          type: array
+          description: Booking details confirmed
+          items:
+            $ref: '#/components/schemas/Booking'
+      description: The Booking List Response Object
+    BookingResponse:
+      title: BookingResponse
+      required:
+      - bookings
+      type: object
+      properties:
+        bookings:
+          type: array
+          description: Booking details confirmed
+          items:
+            $ref: '#/components/schemas/Booking'
+      description: The Booking Response Object
+    CancellationPolicy:
+      title: CancellationPolicy
+      required:
+      - amount
+      - currencyId
+      - from
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Amount
+        currencyId:
+          type: string
+          description: Currency ID
+        from:
+          type: string
+          description: Local date time
+      description: Cancellation policy
+    Category:
+      title: Category
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          type: string
+          description: Code
+        name:
+          type: string
+          description: Name
+      description: Category type
+    CheckPickup:
+      title: CheckPickup
+      type: object
+      properties:
+        hoursBeforeConsulting:
+          type: integer
+          description: Indicates how many hours before the service, the pickup time
+            will be available on the website
+          format: int32
+        mustCheckPickupTime:
+          type: boolean
+          description: Indicates whether the user needs to confirm exact pickup time
+            on external website
+          example: false
+        url:
+          type: string
+          description: URL the user needs to visit in order to confirm pickup time
+      description: Pickup information instructing the client to visit the url if needed
+    ConfirmPickupInformation:
+      title: ConfirmPickupInformation
+      type: object
+      properties:
+        address:
+          type: string
+          description: address
+        country:
+          type: string
+          description: country
+        name:
+          type: string
+          description: name
+        town:
+          type: string
+          description: town
+        zip:
+          type: string
+          description: zip code
+      description: Pickup information used in the confirmation request
+    ConfirmRequest:
+      title: ConfirmRequest
+      required:
+      - holder
+      - language
+      - transfers
+      type: object
+      properties:
+        clientReference:
+          type: string
+          description: Client reference
+        holder:
+          $ref: '#/components/schemas/Pax'
+        language:
+          type: string
+          description: language
+        remark:
+          type: string
+          description: remark
+        transfers:
+          type: array
+          description: List of transfers to confirm
+          items:
+            $ref: '#/components/schemas/TransferConfirm'
+      description: The Confirm Request Object
+    Detail:
+      title: Detail
+      type: object
+      properties:
+        arrivalFlightNumber:
+          type: string
+          description: inbound flight number
+        arrivalShipName:
+          type: string
+          description: inbound ship name
+        arrivalTrainInfo:
+          $ref: '#/components/schemas/TrainInfo'
+        departureFlightNumber:
+          type: string
+          description: outbound flight number
+        departureShipName:
+          type: string
+          description: outbound ship name
+        departureTrainInfo:
+          $ref: '#/components/schemas/TrainInfo'
+      description: transfer confirm detail
+    DropoffInformation:
+      title: DropoffInformation
+      type: object
+      properties:
+        address:
+          type: string
+          description: address
+        country:
+          type: string
+          description: country
+        name:
+          type: string
+          description: name
+        town:
+          type: string
+          description: town
+        zip:
+          type: string
+          description: zip code
+      description: override dropoff information
+    Error:
+      title: Error
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        dateTime:
+          type: string
+          description: Time and date the error was thrown
+        description:
+          type: string
+          description: Error description
+        fieldErrors:
+          type: array
+          description: List of errors caused by field validations
+          items:
+            $ref: '#/components/schemas/FieldError'
+        isBadRequest:
+          type: boolean
+          description: The error is caused by a bad request from client, it's not
+            due to an internal service
+          example: false
+        message:
+          type: string
+          description: Error message
+        nestedError:
+          $ref: '#/components/schemas/Error'
+        serviceName:
+          type: string
+          description: The name of the service that threw this error
+        traceId:
+          type: string
+          description: The trace ID
+      description: The Error Object
+    FieldError:
+      title: FieldError
+      type: object
+      properties:
+        code:
+          type: string
+          description: The field error code
+        field:
+          type: string
+          description: The name of the field with the error
+        message:
+          type: string
+          description: The field error message
+      description: Field validation errors
+    Image:
+      title: Image
+      required:
+      - type
+      - url
+      type: object
+      properties:
+        type:
+          type: string
+          description: Image type
+          enum:
+          - SMALL
+          - MEDIUM
+          - LARGE
+          - EXTRALARGE
+        url:
+          type: string
+          description: Image url
+      description: Image details
+    InvoiceCompany:
+      title: InvoiceCompany
+      required:
+      - name
+      - vatNumber
+      type: object
+      properties:
+        name:
+          type: string
+          description: Supplier name
+        vatNumber:
+          type: string
+          description: Vat number
+      description: The Invoice Company Object
+    Link:
+      title: Link
+      type: object
+      properties:
+        href:
+          type: string
+          description: Href url
+        method:
+          type: string
+          description: HTTP Method
+        rel:
+          type: string
+          description: Rel
+      description: Operational link
+    ModificationsPolicies:
+      title: ModificationsPolicies
+      type: object
+      properties:
+        cancellation:
+          type: boolean
+          description: Cancellation police
+          example: false
+        modification:
+          type: boolean
+          description: Modification police
+          example: false
+      description: The Modification Policy Object
+    Occupancy:
+      title: Occupancy
+      required:
+      - adults
+      - children
+      - infants
+      type: object
+      properties:
+        adults:
+          type: integer
+          description: Number of Adults
+          format: int32
+        children:
+          type: integer
+          description: Number of Children
+          format: int32
+        infants:
+          type: integer
+          description: Number of Infants
+          format: int32
+      description: The pax distribution details
+    Pax:
+      title: Pax
+      required:
+      - email
+      - name
+      - phone
+      - surname
+      type: object
+      properties:
+        email:
+          type: string
+          description: email
+        name:
+          type: string
+          description: name
+        phone:
+          type: string
+          description: phone
+        surname:
+          type: string
+          description: surname
+        type:
+          type: string
+          description: type
+          enum:
+          - ADULT
+          - CHILD
+          - INFANT
+      description: The Pax Object
+    Pickup:
+      title: Pickup
+      type: object
+      properties:
+        address:
+          type: string
+          description: Address
+        altitude:
+          type: number
+          description: Altitude
+          format: double
+        checkPickup:
+          $ref: '#/components/schemas/CheckPickup'
+        description:
+          type: string
+          description: Pickup description
+        image:
+          type: string
+          description: Image
+        latitude:
+          type: number
+          description: Latitude
+          format: double
+        longitude:
+          type: number
+          description: Longitude
+          format: double
+        number:
+          type: string
+          description: Number
+        pickupId:
+          type: integer
+          description: Pickup Id
+          format: int64
+        stopName:
+          type: string
+          description: Stop Name
+        town:
+          type: string
+          description: Town
+        zip:
+          type: string
+          description: Zip
+      description: The pickup information
+    PickupInformation:
+      title: PickupInformation
+      required:
+      - date
+      - from
+      - time
+      - to
+      type: object
+      properties:
+        date:
+          type: string
+          description: Date
+        from:
+          $ref: '#/components/schemas/TransferPoint'
+        pickup:
+          $ref: '#/components/schemas/Pickup'
+        time:
+          type: string
+          description: Time duration
+        to:
+          $ref: '#/components/schemas/TransferPoint'
+      description: The pickup information for transfer
+    Price:
+      title: Price
+      required:
+      - currencyId
+      - netAmount
+      - totalAmount
+      type: object
+      properties:
+        currencyId:
+          type: string
+          description: Currency ID
+        netAmount:
+          type: number
+          description: Net price
+        totalAmount:
+          type: number
+          description: Total amount
+      description: The Transfer Price
+    Route:
+      title: Route
+      required:
+      - date
+      - id
+      - time
+      - unfilteredTotalCount
+      type: object
+      properties:
+        date:
+          type: string
+          description: Date
+        error:
+          $ref: '#/components/schemas/Error'
+        id:
+          type: string
+          description: Id
+        services:
+          type: array
+          description: Transfers services list
+          items:
+            $ref: '#/components/schemas/TransferServiceAvail'
+        time:
+          type: string
+          description: Time duration
+        unfilteredTotalCount:
+          type: integer
+          description: Unfiltered services total count
+          format: int32
+      description: The Transfer Route Services class
+    RouteRequest:
+      title: RouteRequest
+      type: object
+      properties:
+        dateTime:
+          type: string
+        id:
+          type: string
+    RouteRequestDTO:
+      title: RouteRequestDTO
+      required:
+      - dateTime
+      - id
+      type: object
+      properties:
+        dateTime:
+          type: string
+          description: DateTime
+        id:
+          type: string
+          description: Id
+      description: The Route Request DTO Object
+    TrainInfo:
+      title: TrainInfo
+      required:
+      - trainCompanyName
+      - trainNumber
+      type: object
+      properties:
+        trainCompanyName:
+          type: string
+          description: train company name
+        trainNumber:
+          type: string
+          description: train number
+      description: train information
+    TransferDetail:
+      title: Transfer Detail
+      type: object
+      properties:
+        code:
+          type: string
+          description: 'Code: Number of transport(i.e: flight number)'
+        companyName:
+          type: string
+          description: 'Company name: Used in ships. Indicates the name of the ship
+            company'
+        direction:
+          type: string
+          description: 'Direction: {DEPARTURE|ARRIVAL}'
+          enum:
+          - ARRIVAL
+          - DEPARTURE
+        type:
+          type: string
+          description: 'Type: {FLIGHT|CRUISE|TRAIN}'
+          enum:
+          - FLIGHT
+          - CRUISE
+          - TRAIN
+      description: transfer confirm detail
+    TransferConfirm:
+      title: TransferConfirm
+      required:
+      - rateKey
+      type: object
+      properties:
+        detail:
+          $ref: '#/components/schemas/Detail'
+        dropoffInformation:
+          $ref: '#/components/schemas/DropoffInformation'
+        pickupInformation:
+          $ref: '#/components/schemas/ConfirmPickupInformation'
+        rateKey:
+          type: string
+          description: rate key
+        transferDetails:
+          type: array
+          description: transfer details
+          items:
+            $ref: '#/components/schemas/TransferDetail'
+      description: The Transfer Confirm Object
+    TransferDateTime:
+      title: TransferDateTime
+      required:
+      - date
+      - time
+      type: object
+      properties:
+        date:
+          type: string
+          description: Transfer date
+        time:
+          type: string
+          description: Transfer time
+      description: The Transfer Date Time
+    TransferDetailInfo:
+      title: TransferDetailInfo
+      required:
+      - description
+      - id
+      - name
+      - type
+      type: object
+      properties:
+        description:
+          type: string
+          description: Description
+        id:
+          type: string
+          description: Id
+        name:
+          type: string
+          description: Name
+        type:
+          type: string
+          description: Transfer detail info type
+          enum:
+          - GENERAL_INFO
+          - GENERIC_GUIDELINES
+      description: Transfer detailed information
+    TransferPoint:
+      title: TransferPoint
+      required:
+      - code
+      - type
+      type: object
+      properties:
+        code:
+          type: string
+          description: Transfer point code
+        description:
+          type: string
+          description: Transfer point description
+        type:
+          type: string
+          description: Transfer point type
+          enum:
+          - GIATA
+          - ATLAS
+          - IATA
+          - PORT
+          - STATION
+          - GPS
+      description: The Transfer Point Object
+    TransferRemarks:
+      title: TransferRemarks
+      type: object
+      properties:
+        description:
+          type: string
+        mandatory:
+          type: boolean
+        type:
+          type: string
+          enum:
+          - CONTRACT
+          - AGENCY
+      description: Transfer remarks
+    TransferServiceAvail:
+      title: TransferServiceAvail
+      required:
+      - cancellationPolicies
+      - category
+      - direction
+      - id
+      - maxPaxCapacity
+      - minPaxCapacity
+      - pickupInformation
+      - price
+      - rateKey
+      - transferType
+      - vehicle
+      type: object
+      properties:
+        cancellationPolicies:
+          type: array
+          description: Cancellation policies
+          items:
+            $ref: '#/components/schemas/CancellationPolicy'
+        category:
+          $ref: '#/components/schemas/Category'
+        content:
+          $ref: '#/components/schemas/TransferServiceContent'
+        direction:
+          type: string
+          description: Transfer Direction
+          enum:
+          - DEPARTURE
+          - RETURN
+        factsheetId:
+          type: integer
+          description: FactsheetId
+          format: int32
+        id:
+          type: integer
+          description: Id
+          format: int32
+        links:
+          type: array
+          description: Links
+          items:
+            $ref: '#/components/schemas/Link'
+        maxPaxCapacity:
+          type: integer
+          description: Max capacity
+          format: int32
+        minPaxCapacity:
+          type: integer
+          description: Min capacity
+          format: int32
+        pickupInformation:
+          $ref: '#/components/schemas/PickupInformation'
+        price:
+          $ref: '#/components/schemas/Price'
+        rateKey:
+          type: string
+          description: Rate key
+        transferType:
+          type: string
+          description: Transfer Type
+          enum:
+          - PRIVATE
+          - SHARED
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+      description: The Transfer Service superclass
+    TransferServiceBooking:
+      title: TransferServiceBooking
+      required:
+      - cancellationPolicies
+      - category
+      - id
+      - links
+      - pickupInformation
+      - price
+      - status
+      - transferType
+      - vehicle
+      type: object
+      properties:
+        arrivalFlightNumber:
+          type: string
+          description: Arrival flight number
+        arrivalShipName:
+          type: string
+          description: Arrival ship name
+        arrivalTrainInfo:
+          $ref: '#/components/schemas/TrainInfo'
+        cancellationPolicies:
+          type: array
+          description: Cancellation policies
+          items:
+            $ref: '#/components/schemas/CancellationPolicy'
+        category:
+          $ref: '#/components/schemas/Category'
+        content:
+          $ref: '#/components/schemas/TransferServiceContent'
+        departureFlightNumber:
+          type: string
+          description: Departure flight number
+        departureShipName:
+          type: string
+          description: Departure ship name
+        departureTrainInfo:
+          $ref: '#/components/schemas/TrainInfo'
+        factsheetId:
+          type: integer
+          description: FactsheetId
+          format: int32
+        id:
+          type: integer
+          description: Id
+          format: int32
+        links:
+          type: array
+          description: Links
+          items:
+            $ref: '#/components/schemas/Link'
+        paxes:
+          type: array
+          description: Paxes
+          items:
+            $ref: '#/components/schemas/Pax'
+        pickupInformation:
+          $ref: '#/components/schemas/PickupInformation'
+        price:
+          $ref: '#/components/schemas/Price'
+        rateKey:
+          type: string
+          description: Rate Key
+        sourceMarketEmergencyNumber:
+          type: string
+          description: Source market emergency number
+        status:
+          type: string
+          description: Transfer status
+          enum:
+          - CONFIRMED
+          - CANCELLED
+          - MODIFIED
+        transferDetails:
+          type: array
+          description: transfer details
+          items:
+            $ref: '#/components/schemas/TransferDetail'
+        transferType:
+          type: string
+          description: Transfer Type
+          enum:
+          - PRIVATE
+          - SHARED
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+      description: The Transfer Service superclass
+    TransferServiceBookingCancel:
+      title: TransferServiceBookingCancel
+      required:
+      - category
+      - id
+      - pickupInformation
+      - price
+      - status
+      - transferType
+      - vehicle
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/Category'
+        factsheetId:
+          type: integer
+          description: FactsheetId
+          format: int32
+        id:
+          type: integer
+          description: Id
+          format: int32
+        paxes:
+          type: array
+          description: Paxes
+          items:
+            $ref: '#/components/schemas/Pax'
+        pickupInformation:
+          $ref: '#/components/schemas/PickupInformation'
+        price:
+          $ref: '#/components/schemas/Price'
+        status:
+          type: string
+          description: Transfer status
+          enum:
+          - CONFIRMED
+          - CANCELLED
+          - MODIFIED
+        transferType:
+          type: string
+          description: Transfer Type
+          enum:
+          - PRIVATE
+          - SHARED
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+      description: The Transfer Service superclass
+    TransferServiceBookingList:
+      title: TransferServiceBookingList
+      required:
+      - cancellationPolicies
+      - category
+      - links
+      - pickupInformation
+      - price
+      - transferType
+      - vehicle
+      type: object
+      properties:
+        cancellationPolicies:
+          type: array
+          description: Cancellation policies
+          items:
+            $ref: '#/components/schemas/CancellationPolicy'
+        category:
+          $ref: '#/components/schemas/Category'
+        links:
+          type: array
+          description: Links
+          items:
+            $ref: '#/components/schemas/Link'
+        pickupInformation:
+          $ref: '#/components/schemas/PickupInformation'
+        price:
+          $ref: '#/components/schemas/Price'
+        transferType:
+          type: string
+          description: Transfer Type
+          enum:
+          - PRIVATE
+          - SHARED
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+      description: The Transfer Service superclass of the list operation
+    TransferServiceContent:
+      title: TransferServiceContent
+      required:
+      - category
+      - customerTransferTimeInfo
+      - images
+      - supplierTransferTimeInfo
+      - transferDetailInfo
+      - vehicle
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/Category'
+        customerTransferTimeInfo:
+          type: array
+          description: Customer transfer time info
+          items:
+            $ref: '#/components/schemas/TransferTimeInfo'
+        images:
+          type: array
+          description: Image list
+          items:
+            $ref: '#/components/schemas/Image'
+        supplierTransferTimeInfo:
+          type: array
+          description: Supplier transfer time info
+          items:
+            $ref: '#/components/schemas/TransferTimeInfo'
+        transferDetailInfo:
+          type: array
+          description: Transfer detail info
+          items:
+            $ref: '#/components/schemas/TransferDetailInfo'
+        transferRemarks:
+          type: array
+          description: Transfer remarks
+          items:
+            $ref: '#/components/schemas/TransferRemarks'
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+      description: Transfer content info
+    TransferTimeInfo:
+      title: TransferTimeInfo
+      required:
+      - metric
+      - type
+      - value
+      type: object
+      properties:
+        metric:
+          type: string
+          description: Time metric type
+        type:
+          type: string
+          description: Transfer time info type
+          enum:
+          - CUSTOMER_MAX_WAITING_TIME
+          - SUPPLIER_MAX_WAITING_TIME_DOMESTIC
+          - SUPPLIER_MAX_WAITING_TIME_INTERNATIONAL
+        value:
+          type: integer
+          description: Value
+          format: int32
+      description: Transfer time details
+    Vehicle:
+      title: Vehicle
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          type: string
+          description: Code
+        name:
+          type: string
+          description: Name
+      description: Vehicle type
+  securitySchemes:
+    Api-key:
+      type: apiKey
+      name: Api-key
+      in: header

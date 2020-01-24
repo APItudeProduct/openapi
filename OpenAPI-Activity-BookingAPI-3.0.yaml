@@ -1,0 +1,2123 @@
+openapi: 3.0.0
+info:
+  title: Activity Booking API
+  description: >-
+    # APItude Activity Booking API
+    
+    This API will provide you with availability for tickets and excursions and allow you to distribute those not only through the websites but also is thought to support mobile and tablets.
+    
+    
+    APITUDE for Activities API is designed to provide Hotelbeds Group clients with a set of API calls to:
+
+    * Enable the construction or creation of a complete activities website or mobile application (app)
+
+    * Integrate activities products into existing systems both internal and external.
+    
+    * Integrate activities contents for activities into a common CMS for all the products being distributed.
+    
+  
+    The API is divided in the following sections:
+    
+    * **Booking API**: provides all the needed calls (operations) to develop your booking funnel, confirm a booking and obtain the relevant information for a customer to enjoy the activity that he or she bought (in essence the booking number and voucher with all relevant information).
+    
+      APITUDE for Activities is delivered via HTTP(s) POST and GET requests. Request and response data can be in either XML or JSON (preferred) allowing you to easily build requests and parse responses in a standard way by using the tools included with most of the modern languages.
+  termsOfService: 'https://developer.hotelbeds.com/API_Terms_of_Use'
+  contact:
+    name: BTB Support
+    url: 'https://developer.hotelbeds.com'
+    email: integrations.btb@hotelbeds.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: '1.0'
+externalDocs:
+  description: Find out more about APItude
+  url: https://developer.hotelbeds.com
+servers:
+  - url: 'https://api.test.hotelbeds.com/activity-booking-api/1.0'
+    variables: {}
+tags:
+  - name: Activities
+    description: Rest Frontend Service Implementation
+  - name: Activities Detail
+    description: Rest Frontend Service Implementation
+  - name: Excursions pickups
+    description: Rest Frontend Service Implementation
+  - name: Bookings
+    description: Rest Frontend Service Implementation
+paths:
+  /activities:
+    post:
+      tags:
+      - Activities
+      summary: Availability by hotel code
+      operationId: Availabilitybyhotelcode
+      parameters:
+      - name: Api-key
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvailabilitybyhotelcodeRequest'
+            example:
+              filters:
+              - searchFilterItems:
+                - type: hotel
+                  value: 8011
+              from: 2020-06-15
+              to: 2020-06-16
+              language: en
+              pagination:
+                itemsPerPage: 10
+                page: 1
+              order: DEFAULT
+        required: true
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+  /activities/details:
+    post:
+      tags:
+      - Activities Detail
+      summary: Detail Simple
+      operationId: DetailSimple
+      parameters:
+      - name: Api-key
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DetailSimpleRequest'
+            example:
+              code: E-E10-HIGHARTIST
+              from: 2016-07-01
+              to: 2016-07-15
+              language: en
+              paxes:
+              - age: 30
+              - age: 10
+        required: true
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+  /activities/details/full:
+    post:
+      tags:
+      - Activities Detail
+      summary: Detail Full
+      operationId: DetailFull
+      parameters:
+      - name: Api-key
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DetailFullRequest'
+            example:
+              code: E-E10-PF2SHOW
+              from: 2016-03-29
+              to: 2016-04-02
+              language: en
+              paxes:
+              - age: 30
+              - age: 30
+        required: true
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+  /activities/excursions/retrievePickups:
+    post:
+      tags:
+      - Excursions pickups
+      summary: Retrieve Pickups
+      operationId: RetrievePickups
+      parameters:
+      - name: Api-key
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetrievePickupsRequest'
+            example:
+              pickupRetrievalKey: l28k77g6q90mce6hml5do4gvrr
+              from: 2016-04-02
+              to: 2016-04-02
+              pagination:
+                itemsPerPage: 10
+                page: 1
+        required: true
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+  /bookings:
+    put:
+      tags:
+      - Bookings
+      summary: Booking Confirm
+      operationId: BookingConfirm
+      parameters:
+      - name: Api-key
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingConfirmRequest'
+            example:
+              language: en
+              clientReference: TestAgenciaXisco
+              holder:
+                name: TESTXisco
+                title: Mr
+                email: x.bibiloni@hotelbeds.com
+                address: Avenida de Cid
+                zipCode: 07198
+                mailing: true
+                mailUpdDate: 2014-06-06
+                country: ES
+                surname: BibiloniTest
+                telephones:
+                - 123456789
+                - 123456798
+              activities:
+              - preferedLanguage: en
+                serviceLanguage: en
+                rateKey: qceel3tq3nujin53vosiqpeaij
+                from: 2016-07-01
+                to: 2016-07-01
+                paxes:
+                - age: 30
+                  name: XiscoTEst
+                  type: ADULT
+                  surname: TestBibiloni
+                - age: 10
+                  name: TestAitor
+                  type: CHILD
+                  surname: TestBibiloni
+        required: true
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+  /bookings/es/preconfirm:
+    put:
+      tags:
+      - Bookings
+      summary: Booking Preconfirm
+      operationId: BookingPreconfirm
+      parameters:
+      - name: Api-key
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingPreconfirmRequest'
+            example:
+              clientReference: Test TAB
+              holder:
+                surname: Goku
+                name: Son
+                title: Mr
+                email: songoku@capsulecorp.com
+                address: C/ Pez, 33
+                zipCode: 07007
+                telephones:
+                - 555123123
+                - 555456456
+                - 555789789
+                mailing: false
+                country: ES
+              language: en
+              activities:
+              - rateKey: '{{rateKey}}'
+                from: 2016-03-02
+                to: 2016-03-02
+        required: true
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+  /bookings/es/reconfirm:
+    put:
+      tags:
+      - Bookings
+      summary: Booking Reconfirm
+      operationId: BookingReconfirm
+      parameters:
+      - name: Api-key
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingReconfirmRequest'
+            example:
+              language: en
+              reference: '{{bookingReference}}'
+        required: true
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+  /bookings/es:
+    get:
+      tags:
+      - Bookings
+      summary: BookingList
+      operationId: BookingList
+      parameters:
+      - name: start
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 2016-03-20
+      - name: end
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 2016-03-25
+      - name: includedCancelled
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          example: true
+      - name: filterType
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: CREATION
+      - name: Api-key
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+  /bookings/102-6408514:
+    get:
+      tags:
+      - Bookings
+      summary: Booking Detail
+      operationId: BookingDetail
+      parameters:
+      - name: Api-key
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+  /bookings/TEST TAB/SON/Goku/2016-02-17/2016-02-20:
+    get:
+      tags:
+      - Bookings
+      summary: Booking Detail Options
+      operationId: BookingDetailOptions
+      parameters:
+      - name: Api-key
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+  /bookings/add/en/102-6111816:
+    post:
+      tags:
+      - Bookings
+      summary: Booking Modify Add
+      operationId: BookingModifyAdd
+      parameters:
+      - name: Api-key
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingModifyAddRequest'
+            example:
+              clientReference: Test spuerto
+              agencyComments: agency comments modificadas
+              serviceToAdd:
+                rateKey: 686qcgb02e74gq2v1u4bipk7i5
+                from: 2016-07-07
+                to: 2016-07-07
+                paxes:
+                - age: 30
+                - age: 30
+        required: true
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+  /bookings/modify/en/102-6112565:
+    post:
+      tags:
+      - Bookings
+      summary: Booking Modify Modify
+      operationId: BookingModifyModify
+      parameters:
+      - name: Api-key
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingModifyModifyRequest'
+            example:
+              clientReference: TEST ABASTOS
+              serviceToModify:
+                activityId: 102#O#1
+                rateKey: mfkd2ut2lm37cc6pllmn0uut1b
+                from: 2016-07-13
+                to: 2016-07-13
+                paxes:
+                - age: 30
+                  name: miquel
+                  surname: Matasa
+                - age: 30
+        required: true
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+  /bookings/remove/en/102-6111816:
+    post:
+      tags:
+      - Bookings
+      summary: Booking Modify Remove
+      operationId: BookingModifyRemove
+      parameters:
+      - name: Api-key
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingModifyRemoveRequest'
+            example:
+              clientReference: Test spuerto
+              serviceToRemove:
+                activityId: 102#O#1
+        required: true
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+  /bookings/es/102-12345678:
+    delete:
+      tags:
+      - Bookings
+      summary: Booking Cancel
+      operationId: BookingCancel
+      parameters:
+      - name: cancellationFlag
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: SIMULATION
+      - name: Api-key
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+components:
+  schemas:
+    AvailabilitybyhotelcodeRequest:
+      title: AvailabilitybyhotelcodeRequest
+      required:
+      - filters
+      - from
+      - to
+      - language
+      - pagination
+      - order
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+          description: ''
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        order:
+          type: string
+      example:
+        filters:
+        - searchFilterItems:
+          - type: hotel
+            value: 8011
+        from: 2020-06-15
+        to: 2020-06-16
+        language: en
+        pagination:
+          itemsPerPage: 10
+          page: 1
+        order: DEFAULT
+    Filter:
+      title: Filter
+      required:
+      - searchFilterItems
+      type: object
+      properties:
+        searchFilterItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchFilterItem'
+          description: ''
+      example:
+        searchFilterItems:
+        - type: hotel
+          value: 8011
+    SearchFilterItem:
+      title: SearchFilterItem
+      required:
+      - type
+      - value
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: string
+      example:
+        type: hotel
+        value: 8011
+    Pagination:
+      title: Pagination
+      required:
+      - itemsPerPage
+      - page
+      type: object
+      properties:
+        itemsPerPage:
+          type: integer
+          format: int32
+        page:
+          type: integer
+          format: int32
+      example:
+        itemsPerPage: 10
+        page: 1
+    AvailabilitybydestinationRequest:
+      title: AvailabilitybydestinationRequest
+      required:
+      - filters
+      - from
+      - to
+      - language
+      - pagination
+      - order
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+          description: ''
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        order:
+          type: string
+      example:
+        filters:
+        - searchFilterItems:
+          - type: destination
+            value: MCO
+        from: 2020-06-15
+        to: 2020-06-16
+        language: en
+        pagination:
+          itemsPerPage: 10
+          page: 1
+        order: DEFAULT
+    AvailabilitybydestinationandpriceRequest:
+      title: AvailabilitybydestinationandpriceRequest
+      required:
+      - filters
+      - from
+      - to
+      - language
+      - pagination
+      - order
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+          description: ''
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        order:
+          type: string
+      example:
+        filters:
+        - searchFilterItems:
+          - type: destination
+            value: MCO
+          - type: priceFrom
+            value: 50
+          - type: priceTo
+            value: 60
+        from: 2020-06-15
+        to: 2020-06-16
+        language: en
+        pagination:
+          itemsPerPage: 10
+          page: 1
+        order: DEFAULT
+    AvailabilitybydestinationandsegmentRequest:
+      title: AvailabilitybydestinationandsegmentRequest
+      required:
+      - filters
+      - from
+      - to
+      - language
+      - pagination
+      - order
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+          description: ''
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        order:
+          type: string
+      example:
+        filters:
+        - searchFilterItems:
+          - type: destination
+            value: MCO
+          - type: segment
+            value: 3
+        from: 2020-06-15
+        to: 2020-06-16
+        language: en
+        pagination:
+          itemsPerPage: 10
+          page: 1
+        order: DEFAULT
+    AvailabilitybygeolocationRequest:
+      title: AvailabilitybygeolocationRequest
+      required:
+      - filters
+      - from
+      - to
+      - language
+      - pagination
+      - order
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter4'
+          description: ''
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        order:
+          type: string
+      example:
+        filters:
+        - searchFilterItems:
+          - type: gps
+            latitude: 41.49004
+            longitude: 2.08161
+        from: 2020-06-15
+        to: 2020-06-16
+        language: en
+        pagination:
+          itemsPerPage: 10
+          page: 1
+        order: DEFAULT
+    Filter4:
+      title: Filter4
+      required:
+      - searchFilterItems
+      type: object
+      properties:
+        searchFilterItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchFilterItem4'
+          description: ''
+      example:
+        searchFilterItems:
+        - type: gps
+          latitude: 41.49004
+          longitude: 2.08161
+    SearchFilterItem4:
+      title: SearchFilterItem4
+      required:
+      - type
+      - latitude
+      - longitude
+      type: object
+      properties:
+        type:
+          type: string
+        latitude:
+          type: number
+        longitude:
+          type: number
+      example:
+        type: gps
+        latitude: 41.49004
+        longitude: 2.08161
+    AvailabilitybyfactsheetRequest:
+      title: AvailabilitybyfactsheetRequest
+      required:
+      - filters
+      - from
+      - to
+      - language
+      - pagination
+      - order
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+          description: ''
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        order:
+          type: string
+      example:
+        filters:
+        - searchFilterItems:
+          - type: factsheet
+            value: 33880
+        from: 2020-06-15
+        to: 2020-06-16
+        language: en
+        pagination:
+          itemsPerPage: 10
+          page: 1
+        order: DEFAULT
+    AvailabilitybyserviceRequest:
+      title: AvailabilitybyserviceRequest
+      required:
+      - filters
+      - from
+      - to
+      - language
+      - pagination
+      - order
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+          description: ''
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        order:
+          type: string
+      example:
+        filters:
+        - searchFilterItems:
+          - type: service
+            value: E-E10-DINNERCRUI
+        from: 2020-06-15
+        to: 2020-06-16
+        language: en
+        pagination:
+          itemsPerPage: 10
+          page: 1
+        order: DEFAULT
+    AvailabilitybyservicemodalityRequest:
+      title: AvailabilitybyservicemodalityRequest
+      required:
+      - filters
+      - from
+      - to
+      - language
+      - pagination
+      - order
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+          description: ''
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        order:
+          type: string
+      example:
+        filters:
+        - searchFilterItems:
+          - type: service_modality
+            value: E-U10-DINNERCRUI@@#@@7PMDINNER
+        from: 2020-06-15
+        to: 2020-06-16
+        language: en
+        pagination:
+          itemsPerPage: 10
+          page: 1
+        order: DEFAULT
+    AvailabilitybyGIATAcodeRequest:
+      title: AvailabilitybyGIATAcodeRequest
+      required:
+      - filters
+      - from
+      - to
+      - language
+      - pagination
+      - order
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+          description: ''
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        order:
+          type: string
+      example:
+        filters:
+        - searchFilterItems:
+          - type: giata
+            value: 29744
+        from: 2020-06-15
+        to: 2020-06-16
+        language: en
+        pagination:
+          itemsPerPage: 10
+          page: 1
+        order: DEFAULT
+    AvailabilitybyTTIRequest:
+      title: AvailabilitybyTTIRequest
+      required:
+      - filters
+      - from
+      - to
+      - language
+      - pagination
+      - order
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+          description: ''
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        order:
+          type: string
+      example:
+        filters:
+        - searchFilterItems:
+          - type: tti
+            value: 22293826
+        from: 2020-06-15
+        to: 2020-06-16
+        language: en
+        pagination:
+          itemsPerPage: 10
+          page: 1
+        order: DEFAULT
+    Search-OrderPriceRequest:
+      title: Search-OrderPriceRequest
+      required:
+      - filters
+      - from
+      - to
+      - language
+      - pagination
+      - order
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+          description: ''
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        order:
+          type: string
+      example:
+        filters:
+        - searchFilterItems:
+          - type: destination
+            value: MCO
+        from: 2020-06-15
+        to: 2020-06-16
+        language: en
+        pagination:
+          itemsPerPage: 10
+          page: 1
+        order: PRICE
+    Search-OrderNameRequest:
+      title: Search-OrderNameRequest
+      required:
+      - filters
+      - from
+      - to
+      - language
+      - pagination
+      - order
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+          description: ''
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        order:
+          type: string
+      example:
+        filters:
+        - searchFilterItems:
+          - type: destination
+            value: MCO
+        from: 2020-06-15
+        to: 2020-06-16
+        language: en
+        pagination:
+          itemsPerPage: 10
+          page: 1
+        order: NAME
+    DetailSimpleRequest:
+      title: DetailSimpleRequest
+      required:
+      - code
+      - from
+      - to
+      - language
+      - paxes
+      type: object
+      properties:
+        code:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        paxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Paxis'
+          description: ''
+      example:
+        code: E-E10-HIGHARTIST
+        from: 2016-07-01
+        to: 2016-07-15
+        language: en
+        paxes:
+        - age: 30
+        - age: 10
+    Paxis:
+      title: Paxis
+      required:
+      - age
+      type: object
+      properties:
+        age:
+          type: integer
+          format: int32
+      example:
+        age: 30
+    DetailSimplecodeandmodalityRequest:
+      title: DetailSimplecodeandmodalityRequest
+      required:
+      - code
+      - modalityCode
+      - from
+      - to
+      - language
+      - paxes
+      type: object
+      properties:
+        code:
+          type: string
+        modalityCode:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        paxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Paxis'
+          description: ''
+      example:
+        code: E-U10-CIRQUESOLE
+        modalityCode: CAT2
+        from: 2016-04-02
+        to: 2016-04-02
+        language: en
+        paxes:
+        - age: 30
+        - age: 8
+    DetailSimplebundleRequest:
+      title: DetailSimplebundleRequest
+      required:
+      - code
+      - from
+      - to
+      - language
+      - paxes
+      type: object
+      properties:
+        code:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        paxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Paxis'
+          description: ''
+      example:
+        code: E-U10-ESPKIDRIVE
+        from: 2016-04-29
+        to: 2016-04-31
+        language: en
+        paxes:
+        - age: 30
+        - age: 8
+    DetailFullRequest:
+      title: DetailFullRequest
+      required:
+      - code
+      - from
+      - to
+      - language
+      - paxes
+      type: object
+      properties:
+        code:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        paxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Paxis'
+          description: ''
+      example:
+        code: E-E10-PF2SHOW
+        from: 2016-03-29
+        to: 2016-04-02
+        language: en
+        paxes:
+        - age: 30
+        - age: 30
+    DetailwithPickupRequest:
+      title: DetailwithPickupRequest
+      required:
+      - code
+      - from
+      - to
+      - language
+      - paxes
+      - pickup
+      type: object
+      properties:
+        code:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        paxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Paxis'
+          description: ''
+        pickup:
+          $ref: '#/components/schemas/Pickup'
+      example:
+        code: ASX-X-MX0-CHICHEWOND
+        from: 2016-04-02
+        to: 2016-04-22
+        language: en
+        paxes:
+        - age: 30
+        - age: 30
+        pickup:
+          pickupPointCode: LOBY
+          generic: false
+          hotelCode: 183273
+    Pickup:
+      title: Pickup
+      required:
+      - pickupPointCode
+      - generic
+      - hotelCode
+      type: object
+      properties:
+        pickupPointCode:
+          type: string
+        generic:
+          type: boolean
+        hotelCode:
+          type: string
+      example:
+        pickupPointCode: LOBY
+        generic: false
+        hotelCode: 183273
+    DetailwithoutspecificPickupRequest:
+      title: DetailwithoutspecificPickupRequest
+      required:
+      - code
+      - from
+      - to
+      - language
+      - paxes
+      type: object
+      properties:
+        code:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        language:
+          type: string
+        paxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Paxis'
+          description: ''
+      example:
+        code: ASX-X-MX0-CHICHEWOND
+        from: 2016-04-02
+        to: 2016-04-22
+        language: en
+        paxes:
+        - age: 30
+        - age: 30
+    RetrievePickupsRequest:
+      title: RetrievePickupsRequest
+      required:
+      - pickupRetrievalKey
+      - from
+      - to
+      - pagination
+      type: object
+      properties:
+        pickupRetrievalKey:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      example:
+        pickupRetrievalKey: l28k77g6q90mce6hml5do4gvrr
+        from: 2016-04-02
+        to: 2016-04-02
+        pagination:
+          itemsPerPage: 10
+          page: 1
+    BookingConfirmRequest:
+      title: BookingConfirmRequest
+      required:
+      - language
+      - clientReference
+      - holder
+      - activities
+      type: object
+      properties:
+        language:
+          type: string
+        clientReference:
+          type: string
+        holder:
+          $ref: '#/components/schemas/Holder'
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Activity'
+          description: ''
+      example:
+        language: en
+        clientReference: TestAgenciaXisco
+        holder:
+          name: TESTXisco
+          title: Mr
+          email: x.bibiloni@hotelbeds.com
+          address: Avenida de Cid
+          zipCode: 07198
+          mailing: true
+          mailUpdDate: 2014-06-06
+          country: ES
+          surname: BibiloniTest
+          telephones:
+          - 123456789
+          - 123456798
+        activities:
+        - preferedLanguage: en
+          serviceLanguage: en
+          rateKey: qceel3tq3nujin53vosiqpeaij
+          from: 2016-07-01
+          to: 2016-07-01
+          paxes:
+          - age: 30
+            name: XiscoTEst
+            type: ADULT
+            surname: TestBibiloni
+          - age: 10
+            name: TestAitor
+            type: CHILD
+            surname: TestBibiloni
+    Holder:
+      title: Holder
+      required:
+      - name
+      - title
+      - email
+      - address
+      - zipCode
+      - mailing
+      - mailUpdDate
+      - country
+      - surname
+      - telephones
+      type: object
+      properties:
+        name:
+          type: string
+        title:
+          type: string
+        email:
+          type: string
+        address:
+          type: string
+        zipCode:
+          type: string
+        mailing:
+          type: boolean
+        mailUpdDate:
+          type: string
+        country:
+          type: string
+        surname:
+          type: string
+        telephones:
+          type: array
+          items:
+            type: string
+          description: ''
+      example:
+        name: TESTXisco
+        title: Mr
+        email: x.bibiloni@hotelbeds.com
+        address: Avenida de Cid
+        zipCode: 07198
+        mailing: true
+        mailUpdDate: 2014-06-06
+        country: ES
+        surname: BibiloniTest
+        telephones:
+        - 123456789
+        - 123456798
+    Activity:
+      title: Activity
+      required:
+      - preferedLanguage
+      - serviceLanguage
+      - rateKey
+      - from
+      - to
+      - paxes
+      type: object
+      properties:
+        preferedLanguage:
+          type: string
+        serviceLanguage:
+          type: string
+        rateKey:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        paxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Paxis6'
+          description: ''
+      example:
+        preferedLanguage: en
+        serviceLanguage: en
+        rateKey: qceel3tq3nujin53vosiqpeaij
+        from: 2016-07-01
+        to: 2016-07-01
+        paxes:
+        - age: 30
+          name: XiscoTEst
+          type: ADULT
+          surname: TestBibiloni
+        - age: 10
+          name: TestAitor
+          type: CHILD
+          surname: TestBibiloni
+    Paxis6:
+      title: Paxis6
+      required:
+      - age
+      - name
+      - type
+      - surname
+      type: object
+      properties:
+        age:
+          type: integer
+          format: int32
+        name:
+          type: string
+        type:
+          type: string
+        surname:
+          type: string
+      example:
+        age: 30
+        name: XiscoTEst
+        type: ADULT
+        surname: TestBibiloni
+    BookingPreconfirmRequest:
+      title: BookingPreconfirmRequest
+      required:
+      - clientReference
+      - holder
+      - language
+      - activities
+      type: object
+      properties:
+        clientReference:
+          type: string
+        holder:
+          $ref: '#/components/schemas/Holder1'
+        language:
+          type: string
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Activity1'
+          description: ''
+      example:
+        clientReference: Test TAB
+        holder:
+          surname: Goku
+          name: Son
+          title: Mr
+          email: songoku@capsulecorp.com
+          address: C/ Pez, 33
+          zipCode: 07007
+          telephones:
+          - 555123123
+          - 555456456
+          - 555789789
+          mailing: false
+          country: ES
+        language: en
+        activities:
+        - rateKey: '{{rateKey}}'
+          from: 2016-03-02
+          to: 2016-03-02
+    Holder1:
+      title: Holder1
+      required:
+      - surname
+      - name
+      - title
+      - email
+      - address
+      - zipCode
+      - telephones
+      - mailing
+      - country
+      type: object
+      properties:
+        surname:
+          type: string
+        name:
+          type: string
+        title:
+          type: string
+        email:
+          type: string
+        address:
+          type: string
+        zipCode:
+          type: string
+        telephones:
+          type: array
+          items:
+            type: string
+          description: ''
+        mailing:
+          type: boolean
+        country:
+          type: string
+      example:
+        surname: Goku
+        name: Son
+        title: Mr
+        email: songoku@capsulecorp.com
+        address: C/ Pez, 33
+        zipCode: 07007
+        telephones:
+        - 555123123
+        - 555456456
+        - 555789789
+        mailing: false
+        country: ES
+    Activity1:
+      title: Activity1
+      required:
+      - rateKey
+      - from
+      - to
+      type: object
+      properties:
+        rateKey:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+      example:
+        rateKey: '{{rateKey}}'
+        from: 2016-03-02
+        to: 2016-03-02
+    BookingReconfirmRequest:
+      title: BookingReconfirmRequest
+      required:
+      - language
+      - reference
+      type: object
+      properties:
+        language:
+          type: string
+        reference:
+          type: string
+      example:
+        language: en
+        reference: '{{bookingReference}}'
+    BookingModifyAddRequest:
+      title: BookingModifyAddRequest
+      required:
+      - clientReference
+      - agencyComments
+      - serviceToAdd
+      type: object
+      properties:
+        clientReference:
+          type: string
+        agencyComments:
+          type: string
+        serviceToAdd:
+          $ref: '#/components/schemas/ServiceToAdd'
+      example:
+        clientReference: Test spuerto
+        agencyComments: agency comments modificadas
+        serviceToAdd:
+          rateKey: 686qcgb02e74gq2v1u4bipk7i5
+          from: 2016-07-07
+          to: 2016-07-07
+          paxes:
+          - age: 30
+          - age: 30
+    ServiceToAdd:
+      title: ServiceToAdd
+      required:
+      - rateKey
+      - from
+      - to
+      - paxes
+      type: object
+      properties:
+        rateKey:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        paxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Paxis'
+          description: ''
+      example:
+        rateKey: 686qcgb02e74gq2v1u4bipk7i5
+        from: 2016-07-07
+        to: 2016-07-07
+        paxes:
+        - age: 30
+        - age: 30
+    BookingModifyModifyRequest:
+      title: BookingModifyModifyRequest
+      required:
+      - clientReference
+      - serviceToModify
+      type: object
+      properties:
+        clientReference:
+          type: string
+        serviceToModify:
+          $ref: '#/components/schemas/ServiceToModify'
+      example:
+        clientReference: TEST ABASTOS
+        serviceToModify:
+          activityId: 102#O#1
+          rateKey: mfkd2ut2lm37cc6pllmn0uut1b
+          from: 2016-07-13
+          to: 2016-07-13
+          paxes:
+          - age: 30
+            name: miquel
+            surname: Matasa
+          - age: 30
+    ServiceToModify:
+      title: ServiceToModify
+      required:
+      - activityId
+      - rateKey
+      - from
+      - to
+      - paxes
+      type: object
+      properties:
+        activityId:
+          type: string
+        rateKey:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        paxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Paxis8'
+          description: ''
+      example:
+        activityId: 102#O#1
+        rateKey: mfkd2ut2lm37cc6pllmn0uut1b
+        from: 2016-07-13
+        to: 2016-07-13
+        paxes:
+        - age: 30
+          name: miquel
+          surname: Matasa
+        - age: 30
+    Paxis8:
+      title: Paxis8
+      required:
+      - age
+      type: object
+      properties:
+        age:
+          type: integer
+          format: int32
+        name:
+          type: string
+        surname:
+          type: string
+      example:
+        age: 30
+        name: miquel
+        surname: Matasa
+    BookingModifyRemoveRequest:
+      title: BookingModifyRemoveRequest
+      required:
+      - clientReference
+      - serviceToRemove
+      type: object
+      properties:
+        clientReference:
+          type: string
+        serviceToRemove:
+          $ref: '#/components/schemas/ServiceToRemove'
+      example:
+        clientReference: Test spuerto
+        serviceToRemove:
+          activityId: 102#O#1
+    ServiceToRemove:
+      title: ServiceToRemove
+      required:
+      - activityId
+      type: object
+      properties:
+        activityId:
+          type: string
+      example:
+        activityId: 102#O#1

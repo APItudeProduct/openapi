@@ -1,0 +1,319 @@
+openapi: 3.0.0
+info:
+  title: Hotel Cache API
+  description: >
+    # APItude Hotel Cache API
+    
+    Hotel Cache API allows massive access to all our prices and availabilities providing a snapshot of a specific moment in time, so it can be used for package travel or to upload into third party platforms.
+    
+    
+    We recommend you to use any of the above, if you meet any of the following conditions:
+
+    * You are integrated with **price comparison** websites or you manage massive traffic.
+
+    * You publish your prices in any **third party database**.
+    
+    * You send requests to Hotelbed's systems for preparing **offers, mailing or packages**.  
+    
+    
+    With CacheAPI you get Hotelbeds's portfolio in YOUR local system, using a cache solution: 
+    
+    
+    
+    ![cacheapi_main](https://developer.hotelbeds.com/files/cacheapi_main.png)
+    
+    
+    To reach that goal, we provide two different solutions so you can use the one which suits better for your business:
+    
+    * [CacheAPI Scan](https://developer.hotelbeds.com/docs/apitude_cache/scan/): valuation via software.
+    
+    * [CacheAPI Files](https://developer.hotelbeds.com/docs/apitude_cache/files/): valuation in clients side.
+    
+    
+    You have more information of the above models in their corresponding pages. 
+  termsOfService: 'https://developer.hotelbeds.com/API_Terms_of_Use'
+  contact:
+    name: Apitude Support
+    url: https://developer.hotelbeds.com
+    email: apitude@hotelbeds.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: "1.0"
+externalDocs:
+  description: Find out more about APItude
+  url: https://developer.hotelbeds.com
+servers:
+- url: https://api.test.hotelbeds.com/cache-api/{version}
+  variables:
+    version:
+      default: "1.0"
+      description: Specification version
+- url: http://aif2.interface-xml.com/aif2-pub-ws/files
+  variables: {}
+tags:
+- name: Operations
+  description: Rest Frontend Service Implementation
+paths:
+  /fullrates:
+    get:
+      tags:
+      - Operations
+      summary: FullRates
+      description: Devuelve un zip con todos los ficheros AIF diponibles por el cliente que realizar la operación.
+      operationId: FullRates
+      parameters:
+      - name: Accept
+        in: header
+        description: 'Defines response format, posible values: application/xml, application/json'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Api-key
+        in: header
+        description: API Key used in the request
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: SHA256 hash in Hex format from your API Key, your secret plus current timestamps in seconds
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      responses:
+        200:
+          description: A .ZIP file
+          content:
+            .zip:
+              schema:
+                type: string
+                format: binary
+      deprecated: false
+      servers:
+      - url: http://example.com/cache-api/1.0
+        variables: {}
+  /confirmversions:
+    get:
+      tags:
+      - Operations
+      summary: ConfirmVersions
+      description: Mediante el uso del parámetro versión, se le especifica al sistema el punto a partir del cual, mediante la operación UPDATE se devolverá sólo los archivos AIF modificados
+      operationId: ConfirmVersions
+      parameters:
+      - name: version
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 1
+      - name: Api-key
+        in: header
+        description: API Key used in the request
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: SHA256 hash in Hex format from your API Key, your secret plus current timestamps in seconds
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: 'Defines response format, posible values: application/xml, application/json'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: Defines type of encoding used on the data
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      responses:
+        200:
+          description: A .ZIP file
+          content:
+            .zip:
+              schema:
+                type: string
+                format: binary
+      deprecated: false
+      servers:
+      - url: http://example.com/cache-api/1.0
+        variables: {}
+  /updaterates:
+    get:
+      tags:
+      - Operations
+      summary: UpdateRates
+      description: Teniendo en cuenta el valor de la llamada CONFIRM, se devuelven todos los archivos que han cambiado a partir de la versión especificada.
+      operationId: UpdateRates
+      parameters:
+      - name: Api-key
+        in: header
+        description: API Key used in the request
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: SHA256 hash in Hex format from your API Key, your secret plus current timestamps in seconds
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: 'Defines response format, posible values: application/xml, application/json'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: Defines type of encoding used on the data
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      responses:
+        200:
+          description: A .ZIP file
+          content:
+            .zip:
+              schema:
+                type: string
+                format: binary
+      deprecated: false
+      servers:
+      - url: http://example.com/cache-api/1.0
+        variables: {}
+  /full:
+    get:
+      tags:
+      - Operations
+      summary: FULL sin mashery
+      description: Devuelve un zip con todos los ficheros AIF diponibles por el cliente que realizar la operación.
+      operationId: FULLsinmashery
+      parameters:
+      - name: Api-key
+        in: header
+        description: API Key used in the request
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{Api-key}}'
+      - name: X-Signature
+        in: header
+        description: SHA256 hash in Hex format from your API Key, your secret plus current timestamps in seconds
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: '{{X-Signature}}'
+      - name: Accept
+        in: header
+        description: 'Defines response format, posible values: application/xml, application/json'
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      - name: Accept-Encoding
+        in: header
+        description: Defines type of encoding used on the data
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: gzip
+      responses:
+        200:
+          description: A .ZIP file
+          content:
+            .zip:
+              schema:
+                type: string
+                format: binary
+      deprecated: false
+      servers:
+      - url: http://aif2.interface-xml.com/aif2-pub-ws/files
+        variables: {}
+components:
+  parameters:
+    CommonRequestHeaderAccept:
+      name: Accept
+      in: header
+      description: Response format, posible values are application/xml and application/json
+      required: true
+      schema:
+        type: string
+        enum: [application/json, application/xml]
+    CommonRequestHeaderAcceptEncoding:
+      name: Accept-Encoding
+      in: header
+      description: Defines type of encoding used on the data
+      required: true
+      schema:
+        type: string
+        default: gzip
+    CommonRequestHeaderContent:
+      name: Content-Type
+      in: header
+      description: Defines request format, posible values are application/xml and application/json
+      required: true
+      schema:
+        type: string
+        enum: [application/json, application/xml]
+  securitySchemes:
+    Apikey:
+      type: apiKey
+      name: Api-key
+      description: Your registered API key
+      in: header
+    Xsignature:
+      type: apiKey
+      name: X-Signature
+      description: SHA256 encoding signature
+      in: header
+    Xusername:
+      type: apiKey
+      name: X-Username
+      description: User credential
+      in: header
+    Xpassword:
+      type: apiKey
+      name: X-Password
+      description: Password credential
+      in: header
+security:
+  - Apikey: []
+    XSignature:  []
+  - Xusername: []
+    Xpassword: []

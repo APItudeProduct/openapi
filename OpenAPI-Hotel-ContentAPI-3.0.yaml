@@ -1,0 +1,3530 @@
+openapi: 3.0.1
+info:
+  title: Hotel Content API
+  description: |
+    # APItude Hotel Content API
+  
+    Hotel Content API has been designed to retrieve all the details of the hotels available in our [Hotel Booking API](https://developer.test.hotelbeds.com/). 
+    
+    Hotel Content API contains several methods that allow you to obtain the details of the hotels as well as list of destinations, countries and the master types that complement the hotels informatoin (like room type descriptions, accommodation type descriptions, categories descriptions...).
+    
+    The main operation that we have is the Hotels Operation which is connected to the rest of methods, we can consider three different connections based on the information returned in each operation:
+    
+    Note that the Languages operation will be connected to all the operations in which a description is returned,since we will return the language code in which that description has been returned.
+  termsOfService: https://developer.hotelbeds.com/API_Terms_of_Use
+  contact:
+    name: Apitude Support
+    url: https://developer.hotelbeds.com
+    email: apitude@hotelbeds.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: "1.0"
+externalDocs:
+  description: Find out more about APItude
+  url: https://developer.hotelbeds.com
+servers:
+- url: https://api.test.hotelbeds.com/hotel-content-api/{version}
+  variables:
+    version:
+      default: "1.0"
+      description: Specification version
+tags:
+- name: Hotels
+  description: Returns static information of hotels that matches the requested parameters
+- name: Locations
+  description: Returns information of the different levels on our destination tree
+- name: Types
+  description: The types operations retrieve the different master lists needed to use with the Hotel Content API responses
+paths:
+  /hotels:
+    get:
+      tags:
+      - Hotels
+      summary: Hotels
+      description: Returns all the details associated to the Hotel.
+      operationId: hotelsUsingGET
+      parameters:        
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - $ref: '#/components/parameters/CommonRequestParameterLanguage'
+      - $ref: '#/components/parameters/CommonRequestParameterUseSecondaryLanguage'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: destinationCode
+        in: query
+        description: Filter to limit the results for an specific destination.
+        required: true
+        schema:
+          type: string
+      - name: countryCode
+        in: query
+        description: Filter to limit the results for an specific country.
+        required: true
+        schema:
+          type: string
+      - name: codes
+        in: query
+        description: Filter for a specific hotel or list of hotels.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiHotelsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiHotelsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /hotels/{ids}/details:
+    get:
+      tags:
+      - Hotels
+      summary: Hotels with ID details
+      description: Returns all the details associated to the Hotel.
+      operationId: hotelWithIdDetailsUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: ids
+        in: path
+        description: Hotels codes
+        required: true
+        schema:
+          type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiHotelDetailsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiHotelDetailsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /hotels/{id}:
+    get:
+      tags:
+      - Hotels
+      summary: Hotels with ID
+      description: Returns all the details associated to the Hotel.
+      operationId: hotelWithIdUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: id
+        in: path
+        description: Hotel code
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiHotelsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiHotelsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /locations/countries:
+    get:
+      tags:
+      - Locations
+      summary: Countries
+      description: Returns the list of available countries.
+      operationId: countriesUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: codes
+        in: query
+        description: List of codes
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiCountriesRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiCountriesRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /locations/destinations:
+    get:
+      tags:
+      - Locations
+      summary: Destinations
+      description: "This is the main code in our system and covers the largest area.\
+        \ Searching with the destination code retrieves all the results available.\n\
+        \nPlease note that we do not use IATA codes; we have our own destination codes.\
+        \ It is very important to understand that our 'destination' will not always\
+        \ only correspond with a unique city, but usually with the main city and the\
+        \ area surrounding the city. \n\nFor example, the destination code NYC in\
+        \ the US, corresponds with the whole New York Area, so it is not limited to\
+        \ the city of New York, but also covers the surrounding areas, such as New\
+        \ Jersey and The Hamptons. \n\nAnother example is BCN in Spain, which corresponds\
+        \ with the entire Barcelona Province; so it searches hotels located in the\
+        \ city of Barcelona, but also in other cities within the Province of Barcelona,\
+        \ such us Hospitalet de Llobregat, Terrassa and Sabadell.\n\nSo when you search\
+        \ for availability using the destination code, you will receive results that\
+        \ may be located far from the main city for which you are actually searching.\
+        \ \n\nIt is very important to check the locations that the search retrieves\
+        \ to avoid booking hotels in a different location than the one requested by\
+        \ your customers."
+      operationId: destinationsUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: codes
+        in: query
+        description: Filter to limit the results for an specific destination or list
+          of destinations
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: countryCodes
+        in: query
+        description: Filter for a specific country of list of countries.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+          default: ENG
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiDestinationsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiDestinationsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/accommodations:
+    get:
+      tags:
+      - Types
+      summary: Hotel accommodations
+      description: Returns the list of available accommodation types.
+      operationId: accommodationsUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: codes
+        in: query
+        description: List of codes
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiAccommodationsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiAccommodationsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/boards:
+    get:
+      tags:
+      - Types
+      summary: Boards
+      description: Returns the list of available board types.
+      operationId: boardsUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: codes
+        in: query
+        description: List of codes
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiBoardsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiBoardsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/categories:
+    get:
+      tags:
+      - Types
+      summary: Categories
+      description: Returns the list of available categories.
+      operationId: categoriesUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: codes
+        in: query
+        description: List of codes
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiCategoriesRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiCategoriesRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/chains:
+    get:
+      tags:
+      - Types
+      summary: Chains
+      description: 'Returns the list of available chains. '
+      operationId: chainsUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: codes
+        in: query
+        description: Filter for a specific hotel or list of hotels.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiChainsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiChainsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/currencies:
+    get:
+      tags:
+      - Types
+      summary: Currencies
+      description: Returns the list of available currencies.
+      operationId: currenciesUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: codes
+        in: query
+        description: List of codes
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiCurrenciesRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiCurrenciesRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/facilities:
+    get:
+      tags:
+      - Types
+      summary: Facilities
+      description: Returns the list of available facilities.
+      operationId: facilitiesUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: codes
+        in: query
+        description: List of codes
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiFacilitiesRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiFacilitiesRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/facilitygroups:
+    get:
+      tags:
+      - Types
+      summary: FacilityGroups
+      description: Returns the list of available facility groups.
+      operationId: facilitygroupsUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: lastUpdateTime
+        required: true
+        schema:
+          type: string
+      - name: codes
+        in: query
+        description: codes
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: from
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: to
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: useSecondaryLanguage
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiFacilityGroupsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiFacilityGroupsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/facilitytypologies:
+    get:
+      tags:
+      - Types
+      summary: FacilityTipologies
+      description: 'Returns the list of available facility typologies.Remarks: Since
+        all fields are returned by default, there won''t be any field to filter.'
+      operationId: facilitytypologiesUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: codes
+        in: query
+        description: List of codes
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiFacilityTypologiesRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiFacilityTypologiesRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/groupcategories:
+    get:
+      tags:
+      - Types
+      summary: Group categories
+      description: Returns the descriptions of the different category groups.
+      operationId: groupcategoriesUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: codes
+        in: query
+        description: List of codes
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiGroupCategoriesRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGroupCategoriesRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/imagetypes:
+    get:
+      tags:
+      - Types
+      summary: Image types
+      description: Returns the descriptions of the different image types.
+      operationId: imagetypesUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: codes
+        in: query
+        description: List of codes
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiImageTypesRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiImageTypesRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/issues:
+    get:
+      tags:
+      - Types
+      summary: Hotel Issues
+      description: Repair works, facilities closed,...
+      operationId: issuesUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: codes
+        in: query
+        description: List of codes
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiIssuesRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiIssuesRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/languages:
+    get:
+      tags:
+      - Types
+      summary: Languages
+      description: Returns the list of available languages.
+      operationId: languagesUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiLanguagesRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiLanguagesRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/promotions:
+    get:
+      tags:
+      - Types
+      summary: Promotions
+      description: Returns the list of available promotions.
+      operationId: promotionsUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: codes
+        in: query
+        description: List of codes
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiPromotionsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiPromotionsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/ratecommentdetails:
+    get:
+      tags:
+      - Types
+      summary: Rate comment details
+      description: Returns the descriptions of the rate comments associated with the
+        hotel that the hotelier wants the client to read before confirming the booking
+        with the given date.
+      operationId: ratecommentdetailUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: date
+        in: query
+        description: Comment date
+        required: true
+        schema:
+          type: string
+      - name: code
+        in: query
+        description: Code
+        required: true
+        schema:
+          type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiRateCommentDetailsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateCommentDetailsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/ratecomments:
+    get:
+      tags:
+      - Types
+      summary: Rate comments
+      description: Returns the descriptions of the rate comments associated with the
+        hotel that the hotelier wants the client to read before confirming the booking.
+      operationId: rateCommentsUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiRateCommentsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateCommentsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/ratecomments/{id}:
+    get:
+      tags:
+      - Types
+      summary: Rate comments by id
+      description: Returns the descriptions of the rate comments associated with the
+        hotel that the hotelier wants the client to read before confirming the booking.
+      operationId: rateCommentsByIdUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: id
+        in: path
+        description: Comment ID
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiRateCommentsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateCommentsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/ratecomments/{id}/details:
+    get:
+      tags:
+      - Types
+      summary: Rate comment details by id
+      description: Returns the descriptions of the rate comments associated with the
+        hotel that the hotelier wants the client to read before confirming the booking
+        with the given date.
+      operationId: ratecommentdetailByIdUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: date
+        in: query
+        description: Comment date
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Comment ID
+        required: true
+        schema:
+          type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiRateCommentDetailsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRateCommentDetailsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/rooms:
+    get:
+      tags:
+      - Types
+      summary: Rooms
+      description: Returns the list of available rooms.
+      operationId: roomsUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: codes
+        in: query
+        description: List of codes
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiRoomsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiRoomsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/segments:
+    get:
+      tags:
+      - Types
+      summary: Segments
+      description: 'Returns the list of available segments. '
+      operationId: segmentsUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: codes
+        in: query
+        description: List of codes
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiSegmentsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSegmentsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+  /types/terminals:
+    get:
+      tags:
+      - Types
+      summary: Terminals
+      description: List of terminals per country/destination
+      operationId: terminalsUsingGET
+      parameters:
+      - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+      - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+      - name: fields
+        in: query
+        description: The list of fields to be received in the response. If nothing
+          is specified, the accommodation type code is returned. To retrieve all the
+          fields use ‘all’. See the complete list of available fields in the response.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: lastUpdateTime
+        in: query
+        description: Specifying this parameter limits the results to those modified
+          or added after the date specified. The required format is YYYY-MM-DD.
+        required: true
+        schema:
+          type: string
+      - name: codes
+        in: query
+        description: List of codes
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: language
+        in: query
+        description: The language code for the language in which you want the descriptions
+          to be returned. If the language is not specified, English is the default
+          language.
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: The number of the initial record to receive. If nothing is specified,
+          1 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: to
+        in: query
+        description: The number of the final record to receive. If nothing is indicated,
+          100 is the default value.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: useSecondaryLanguage
+        in: query
+        description: Specify "True" if you want to receive the descriptions in English
+          if the description is not available in the language requested. Specify "False"
+          (default value) if you do not want to receive the description in English
+          if the language requested is not available.
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiTerminalsRS'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTerminalsRS'
+        400:
+          description: Bad Request
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        402:
+          description: Payment Required
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+        503:
+          description: Product Exception/Service Unavailable
+          content: {}
+components:
+  parameters:
+    CommonRequestHeaderAccept:
+      name: Accept
+      in: header
+      description: Response format, posible values are application/xml and application/json
+      required: true
+      schema:
+        type: string
+        enum: [application/json, application/xml]
+    CommonRequestHeaderAcceptEncoding:
+      name: Accept-Encoding
+      in: header
+      description: Defines type of encoding used on the data
+      required: true
+      schema:
+        type: string
+        default: gzip
+    CommonRequestParameterLanguage:
+      name: language
+      in: query
+      description: The language code for the language in which you want the descriptions to be returned. If the language is not specified, English is the default language.
+      required: false
+      schema:
+        type: string
+    CommonRequestParameterUseSecondaryLanguage:
+      name: useSecondaryLanguage
+      in: query
+      description: Defines if you want to receive the descriptions in English if the description is not available in the language requested.
+      required: false
+      schema:
+        type: boolean
+  schemas:
+    ApiLanguage:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        name:
+          type: string
+    ApiRateCommentsRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        rateComments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiRateComments'
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiHotelPointOfInterest:
+      type: object
+      properties:
+        distance:
+          type: string
+        facilityCode:
+          type: integer
+          format: int32
+        facilityGroupCode:
+          type: integer
+          format: int32
+        fee:
+          type: boolean
+        order:
+          type: integer
+          format: int32
+        poiName:
+          type: string
+    ApiAccommodationsRS:
+      type: object
+      properties:
+        accommodations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiAccommodation'
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiHotelFacility:
+      type: object
+      properties:
+        ageFrom:
+          type: integer
+          format: int32
+        ageTo:
+          type: integer
+          format: int32
+        amount:
+          type: number
+        applicationType:
+          type: string
+        currency:
+          type: string
+        dateFrom:
+          type: string
+        dateTo:
+          type: string
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        distance:
+          type: integer
+          format: int32
+        facilityCode:
+          type: integer
+          format: int32
+        facilityGroupCode:
+          type: integer
+          format: int32
+        facilityName:
+          type: string
+        indFee:
+          type: boolean
+        indLogic:
+          type: boolean
+        indYesOrNo:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        order:
+          type: integer
+          format: int32
+        timeFrom:
+          type: string
+        timeTo:
+          type: string
+        voucher:
+          type: boolean
+    ApiHotelRoomStay:
+      type: object
+      properties:
+        description:
+          type: string
+        order:
+          type: string
+        roomStayFacilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiHotelRoomStayFacility'
+        stayType:
+          type: string
+    ApiChainsRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        chains:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiChain'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiLanguagesRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiLanguage'
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiChain:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          $ref: '#/components/schemas/ApiContent'
+    ApiTerminalsRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        terminals:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTerminal'
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiCountriesRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        countries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiCountry'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiGroupCategoriesRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        groupCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiGroupCategory'
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiSegment:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        description:
+          $ref: '#/components/schemas/ApiContent'
+    ApiFacilitiesRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        facilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiFacility'
+        from:
+          type: integer
+          format: int32
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiFacilityGroup:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        description:
+          $ref: '#/components/schemas/ApiContent'
+    ApiDestination:
+      type: object
+      properties:
+        code:
+          type: string
+        countryCode:
+          type: string
+        groupZones:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiGroupZone'
+        isoCode:
+          type: string
+        name:
+          $ref: '#/components/schemas/ApiContent'
+        zones:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiZone'
+    ApiCodedElement:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          $ref: '#/components/schemas/ApiContent'
+    ApiHotelIssue:
+      type: object
+      properties:
+        alternative:
+          type: boolean
+        dateFrom:
+          type: string
+        dateTo:
+          type: string
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        issueCode:
+          type: string
+        issueType:
+          type: string
+        order:
+          type: integer
+          format: int32
+    ApiTerminal:
+      type: object
+      properties:
+        code:
+          type: string
+        country:
+          type: string
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        name:
+          $ref: '#/components/schemas/ApiContent'
+        type:
+          type: string
+    ApiCategoriesRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiCategory'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiRateCommentDetailsRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        code:
+          type: string
+        date:
+          type: string
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        hotel:
+          type: integer
+          format: int32
+        incoming:
+          type: integer
+          format: int32
+        rateComments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiRateComment'
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiSegmentsRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiSegment'
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiGroupZone:
+      type: object
+      properties:
+        groupZoneCode:
+          type: string
+        name:
+          $ref: '#/components/schemas/ApiContent'
+        zones:
+          type: array
+          items:
+            type: integer
+            format: int32
+    ApiImageTypesRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        imageTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiImageType'
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiAccommodation:
+      type: object
+      properties:
+        code:
+          type: string
+        typeDescription:
+          type: string
+        typeMultiDescription:
+          $ref: '#/components/schemas/ApiContent'
+    ApiWildCard:
+      type: object
+      properties:
+        characteristicCode:
+          type: string
+        hotelRoomDescription:
+          $ref: '#/components/schemas/ApiContent'
+        roomCode:
+          type: string
+        roomType:
+          type: string
+    ApiIssue:
+      type: object
+      properties:
+        alternative:
+          type: boolean
+        code:
+          type: string
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        name:
+          $ref: '#/components/schemas/ApiContent'
+        type:
+          type: string
+    ApiRoomsRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiRoom'
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiImageType:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          $ref: '#/components/schemas/ApiContent'
+    ApiCategory:
+      type: object
+      properties:
+        accommodationType:
+          type: string
+        code:
+          type: string
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        group:
+          type: string
+        simpleCode:
+          type: integer
+          format: int32
+    ApiGroupCategory:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        name:
+          $ref: '#/components/schemas/ApiContent'
+        order:
+          type: integer
+          format: int32
+    ApiHotelRoom:
+      type: object
+      properties:
+        characteristic:
+          $ref: '#/components/schemas/ApiCodedElement'
+        characteristicCode:
+          type: string
+        description:
+          type: string
+        roomCode:
+          type: string
+        roomFacilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiHotelRoomFacility'
+        roomStays:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiHotelRoomStay'
+        roomType:
+          type: string
+        type:
+          $ref: '#/components/schemas/ApiCodedElement'
+    ApiHotelTerminal:
+      type: object
+      properties:
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        distance:
+          type: integer
+          format: int32
+        name:
+          $ref: '#/components/schemas/ApiContent'
+        terminalCode:
+          type: string
+        terminalType:
+          type: string
+    ApiZone:
+      type: object
+      properties:
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        name:
+          type: string
+        zoneCode:
+          type: integer
+          format: int32
+    ApiFacility:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        facilityGroupCode:
+          type: integer
+          format: int32
+        facilityTypologyCode:
+          type: integer
+          format: int32
+    ApiFacilityGroupsRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        facilityGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiFacilityGroup'
+        from:
+          type: integer
+          format: int32
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiCurrency:
+      type: object
+      properties:
+        code:
+          type: string
+        currencyType:
+          type: string
+        description:
+          $ref: '#/components/schemas/ApiContent'
+    ApiFacilityType:
+      type: object
+      properties:
+        ageFromFlag:
+          type: boolean
+        ageToFlag:
+          type: boolean
+        amountFlag:
+          type: boolean
+        appTypeFlag:
+          type: boolean
+        code:
+          type: integer
+          format: int32
+        currencyFlag:
+          type: boolean
+        dateFromFlag:
+          type: boolean
+        dateToFlag:
+          type: boolean
+        distanceFlag:
+          type: boolean
+        feeFlag:
+          type: boolean
+        indYesOrNoFlag:
+          type: boolean
+        logicFlag:
+          type: boolean
+        numberFlag:
+          type: boolean
+        textFlag:
+          type: boolean
+        timeFromFlag:
+          type: boolean
+        timeToFlag:
+          type: boolean
+    ApiBoardsRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        boards:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiBoard'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiRateComment:
+      type: object
+      properties:
+        dateEnd:
+          type: string
+        dateStart:
+          type: string
+        description:
+          type: string
+    ApiImage:
+      type: object
+      properties:
+        characteristicCode:
+          type: string
+        hotel:
+          type: string
+        imageTypeCode:
+          type: string
+        order:
+          type: integer
+          format: int32
+        path:
+          type: string
+        roomCode:
+          type: string
+        roomType:
+          type: string
+        type:
+          $ref: '#/components/schemas/ApiImageType'
+        visualOrder:
+          type: integer
+          format: int32
+    ApiRateComments:
+      type: object
+      properties:
+        code:
+          type: string
+        commentsByRates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiRateCommentBlock'
+        hotel:
+          type: integer
+          format: int32
+        incoming:
+          type: integer
+          format: int32
+    ApiPromotionsRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        promotions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiPromotion'
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiIssuesRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        issues:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiIssue'
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiCurrenciesRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        currencies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiCurrency'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiFacilityTypologiesRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        facilityTypologies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiFacilityType'
+        from:
+          type: integer
+          format: int32
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiPromotion:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        name:
+          $ref: '#/components/schemas/ApiContent'
+    ApiRateCommentBlock:
+      type: object
+      properties:
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiRateComment'
+        id:
+          type: string
+        rateCodes:
+          type: array
+          items:
+            type: integer
+            format: int32
+    ApiDestinationsRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        destinations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiDestination'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiBoard:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        multiLingualCode:
+          type: string
+    ApiHotel:
+      type: object
+      properties:
+        S2C:
+          type: string
+        accommodationType:
+          $ref: '#/components/schemas/ApiAccommodation'
+        accommodationTypeCode:
+          type: string
+        address:
+          $ref: '#/components/schemas/ApiContent'
+        boardCodes:
+          type: array
+          items:
+            type: string
+        boards:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiBoard'
+        category:
+          $ref: '#/components/schemas/ApiCategory'
+        categoryCode:
+          type: string
+        categoryGroup:
+          $ref: '#/components/schemas/ApiGroupCategory'
+        categoryGroupCode:
+          type: string
+        chain:
+          $ref: '#/components/schemas/ApiChain'
+        chainCode:
+          type: string
+        city:
+          $ref: '#/components/schemas/ApiContent'
+        code:
+          type: integer
+          format: int32
+        coordinates:
+          $ref: '#/components/schemas/ApiGeoLocation'
+        country:
+          $ref: '#/components/schemas/ApiCountry'
+        countryCode:
+          type: string
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        destination:
+          $ref: '#/components/schemas/ApiDestination'
+        destinationCode:
+          type: string
+        email:
+          type: string
+        exclusiveDeal:
+          type: integer
+          format: int32
+        facilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiHotelFacility'
+        giataCode:
+          type: integer
+          format: int32
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiImage'
+        interestPoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiHotelPointOfInterest'
+        issues:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiHotelIssue'
+        lastUpdate:
+          type: string
+        license:
+          type: string
+        name:
+          $ref: '#/components/schemas/ApiContent'
+        phones:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiHotelPhone'
+        postalCode:
+          type: string
+        ranking:
+          type: integer
+          format: int32
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiHotelRoom'
+        segmentCodes:
+          type: array
+          items:
+            type: integer
+            format: int32
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiSegment'
+        state:
+          $ref: '#/components/schemas/ApiState'
+        stateCode:
+          type: string
+        terminals:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiHotelTerminal'
+        web:
+          type: string
+        wildcards:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiWildCard'
+        zone:
+          $ref: '#/components/schemas/ApiZone'
+        zoneCode:
+          type: integer
+          format: int32
+    ApiHotelDetailsRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        hotel:
+          $ref: '#/components/schemas/ApiHotel'
+        hotels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiHotel'
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiHotelPhone:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+        phoneType:
+          type: string
+    ApiState:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+    ApiHotelRoomFacility:
+      type: object
+      properties:
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        facilityCode:
+          type: integer
+          format: int32
+        facilityGroupCode:
+          type: integer
+          format: int32
+        indFee:
+          type: boolean
+        indLogic:
+          type: boolean
+        indYesOrNo:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        order:
+          type: integer
+          format: int32
+        voucher:
+          type: boolean
+    ApiHotelRoomStayFacility:
+      type: object
+      properties:
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        facilityCode:
+          type: integer
+          format: int32
+        facilityGroupCode:
+          type: integer
+          format: int32
+        number:
+          type: integer
+          format: int32
+    ApiGeoLocation:
+      type: object
+      properties:
+        latitude:
+          type: number
+        longitude:
+          type: number
+    ApiHotelbedsError:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    ApiRoom:
+      type: object
+      properties:
+        characteristic:
+          type: string
+        characteristicDescription:
+          $ref: '#/components/schemas/ApiContent'
+        code:
+          type: string
+        description:
+          type: string
+        maxAdults:
+          type: integer
+          format: int32
+        maxChildren:
+          type: integer
+          format: int32
+        maxPax:
+          type: integer
+          format: int32
+        minAdults:
+          type: integer
+          format: int32
+        minPax:
+          type: integer
+          format: int32
+        type:
+          type: string
+        typeDescription:
+          $ref: '#/components/schemas/ApiContent'
+    ApiAuditData:
+      type: object
+      properties:
+        environment:
+          type: string
+        expiration:
+          type: string
+        internal:
+          type: string
+        processTime:
+          type: string
+        release:
+          type: string
+        requestHost:
+          type: string
+        serverId:
+          type: string
+        timestamp:
+          type: string
+    ApiHotelsRS:
+      type: object
+      properties:
+        auditData:
+          $ref: '#/components/schemas/ApiAuditData'
+        error:
+          $ref: '#/components/schemas/ApiHotelbedsError'
+        from:
+          type: integer
+          format: int32
+        hotels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiHotel'
+        to:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ApiCountry:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          $ref: '#/components/schemas/ApiContent'
+        isoCode:
+          type: string
+        states:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiState'
+    ApiContent:
+      type: object
+      properties:
+        content:
+          type: string
+        languageCode:
+          type: string
+  securitySchemes:
+    Apikey:
+      type: apiKey
+      name: Api-key
+      description: Your registered API key
+      in: header
+    Xsignature:
+      type: apiKey
+      name: X-Signature
+      description: SHA256 encoding signature
+      in: header
+security:
+  - Apikey: []
+    XSignature:  []

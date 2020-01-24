@@ -1,0 +1,566 @@
+openapi: 3.0.1
+info:
+  title: Activity Cache API
+  description: |
+    # APItude Activity Cache API 
+    Activity Cache APIprovides an updated portfolio of Hotelbeds products
+    for customers.
+  termsOfService: 'https://developer.hotelbeds.com/API_Terms_of_Use'
+  contact:
+    name: BTB Support
+    url: 'https://developer.hotelbeds.com'
+    email: integrations.btb@hotelbeds.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: '1.0'
+externalDocs:
+  description: Find out more about APItude
+  url: https://developer.hotelbeds.com
+servers:
+  - url: 'https://api.test.hotelbeds.com/activity-cache-api/1.0'
+    variables: {}
+tags:
+- name: Activities avail
+  description: Avail Controller
+- name: Activities portfolio
+  description: Portfolio Controller
+- name: Cache Management
+  description: Cache Management Controller
+paths:
+  /avail:
+    get:
+      tags:
+      - Activities avail
+      summary: Activities avail
+      description: Returns a Response with a list of available activities
+      operationId: availResponse
+      parameters:
+      - name: destination
+        in: query
+        description: Specific destination code that will be returned in the response
+          object, if it exists.
+        allowEmptyValue: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Used for pagination. Number of items from the index indicated
+          by the offset parameter that will be included in the response object.
+        allowEmptyValue: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: offset
+        in: query
+        description: Used for pagination. Index of the item from which the list will
+          be generated in the response object.
+        allowEmptyValue: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        200:
+          description: Response OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/AvailResponseDTO'
+        204:
+          description: No content
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/AvailResponseDTO'
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        500:
+          description: Not handled error
+          content: {}
+      deprecated: false
+      security:
+      - Api-key: []
+  /portfolio:
+    get:
+      tags:
+      - Activities portfolio
+      summary: Activities portfolio
+      description: Returns a Response with a list of activities
+      operationId: activity
+      parameters:
+      - name: destination
+        in: query
+        description: Specific destination code that will be returned in the response
+          object, if it exist.
+        allowEmptyValue: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Used for pagination. Number of items from the index indicated
+          by the offset parameter that will be included in the response object.
+        allowEmptyValue: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: offset
+        in: query
+        description: Used for pagination. Index of the item from which the list will
+          be generated in the response object.
+        allowEmptyValue: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        200:
+          description: Response OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Activity'
+        204:
+          description: No content
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Activity'
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        500:
+          description: Not handled error
+          content: {}
+      deprecated: false
+      security:
+      - Api-key: []
+  /private/caches:
+    get:
+      tags:
+      - Cache Management
+      summary: Cache management
+      description: List all caches
+      operationId: listAll
+      responses:
+        200:
+          description: Response OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CacheInfo'
+        500:
+          description: Not handled error
+          content: {}
+      deprecated: false
+      security:
+      - Api-key: []
+  /private/caches/reload:
+    get:
+      tags:
+      - Cache Management
+      summary: Cache management
+      description: Reloads all caches
+      operationId: reloadAll
+      responses:
+        200:
+          description: Response OK
+          content: {}
+        500:
+          description: Not handled error
+          content: {}
+      deprecated: false
+      security:
+      - Api-key: []
+  /private/caches/{cacheRepositoryName}/reload:
+    get:
+      tags:
+      - Cache Management
+      summary: Cache management
+      description: Reloads the cache indicated
+      operationId: reload
+      parameters:
+      - name: cacheRepositoryName
+        in: path
+        description: Indicates the name of the cache to be reloaded.
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Response OK
+          content: {}
+        500:
+          description: Not handled error
+          content: {}
+      deprecated: false
+      security:
+      - Api-key: []
+components:
+  schemas:
+    Activity:
+      title: Activity
+      type: object
+      properties:
+        code:
+          type: string
+          description: Activity code.
+        country:
+          type: string
+          description: Activity country code.
+        destination:
+          type: string
+          description: Activity destination code.
+        modalities:
+          type: array
+          description: Activity modalities.
+          items:
+            $ref: '#/components/schemas/Modality'
+        name:
+          type: string
+          description: Activity name.
+        type:
+          type: string
+          description: Activity type.
+          enum:
+          - TICKET
+          - EXCURSION
+      description: The Activity Object.
+    ActivityDTO:
+      title: ActivityDTO
+      type: object
+      properties:
+        code:
+          type: string
+          description: Activity code.
+        country:
+          type: string
+          description: Activity country code.
+        destination:
+          type: string
+          description: Activity destination code.
+        modalities:
+          type: array
+          description: Activity modalities.
+          items:
+            $ref: '#/components/schemas/ModalityDTO'
+        name:
+          type: string
+          description: Activity name.
+        type:
+          type: string
+          description: Activity type.
+          enum:
+          - TICKET
+          - EXCURSION
+      description: The Activity Object for avail operation.
+    AvailResponseDTO:
+      title: AvailResponseDTO
+      type: object
+      properties:
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivityDTO'
+    AvailabilityDateDTO:
+      title: AvailabilityDateDTO
+      type: object
+      properties:
+        dateFrom:
+          type: string
+        dateTo:
+          type: string
+    CacheInfo:
+      title: CacheInfo
+      type: object
+      properties:
+        active:
+          type: boolean
+          description: Cache is active.
+        chunkSize:
+          type: integer
+          description: Cache chunk size.
+          format: int32
+        count:
+          type: integer
+          description: Cache count.
+          format: int32
+        executionTime:
+          type: string
+          description: Cache execution time.
+        name:
+          type: string
+          description: Cache name.
+      description: The Cache Information Object.
+    CancellationPolicyDTO:
+      title: CancellationPolicyDTO
+      type: object
+      properties:
+        daysBefore:
+          type: integer
+          format: int32
+        percentage:
+          type: number
+          format: double
+    ContractDTO:
+      title: ContractDTO
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        incomingOffice:
+          type: integer
+          format: int32
+    DurationDTO:
+      title: DurationDTO
+      type: object
+      properties:
+        metric:
+          type: string
+          enum:
+          - UNIT
+          - HOURS
+          - DAYS
+        value:
+          type: number
+          format: double
+    ErrorDTO:
+      title: ErrorDTO
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        dateTime:
+          type: string
+          description: Time and date the error was thrown
+        description:
+          type: string
+          description: Error description
+        fieldErrors:
+          type: array
+          description: List of errors caused by field validations
+          items:
+            $ref: '#/components/schemas/FieldErrorDTO'
+        isBadRequest:
+          type: boolean
+          description: The error is caused by a bad request from client, it's not
+            due to an internal service
+        message:
+          type: string
+          description: Error message
+        nestedError:
+          $ref: '#/components/schemas/ErrorDTO'
+        serviceName:
+          type: string
+          description: The name of the service that threw this error
+        traceId:
+          type: string
+          description: The trace ID
+    FieldErrorDTO:
+      title: FieldErrorDTO
+      type: object
+      properties:
+        code:
+          type: string
+          description: The field error code
+        field:
+          type: string
+          description: The name of the field with the error
+        message:
+          type: string
+          description: The field error message
+    Modality:
+      title: Modality
+      type: object
+      properties:
+        code:
+          type: string
+          description: Modality code.
+        languages:
+          type: array
+          description: Modality languages.
+          items:
+            type: string
+        name:
+          type: string
+          description: Modality name.
+        onSale:
+          type: boolean
+          description: Onsale true/false
+        rates:
+          type: array
+          description: Modality rates.
+          items:
+            type: string
+        sessions:
+          type: array
+          description: Modality sessions.
+          items:
+            type: string
+      description: The Modality Object.
+    ModalityDTO:
+      title: ModalityDTO
+      type: object
+      properties:
+        amountsFrom:
+          type: array
+          description: Modality prices by pax type.
+          items:
+            $ref: '#/components/schemas/PaxPriceDTO'
+        availabilityDates:
+          type: array
+          description: Modality availability dates.
+          items:
+            $ref: '#/components/schemas/AvailabilityDateDTO'
+        cancellationPolicies:
+          type: array
+          description: Modality cancellation policies.
+          items:
+            $ref: '#/components/schemas/CancellationPolicyDTO'
+        code:
+          type: string
+          description: Modality code.
+        contract:
+          $ref: '#/components/schemas/ContractDTO'
+        duration:
+          $ref: '#/components/schemas/DurationDTO'
+        languages:
+          type: array
+          description: Modality languages.
+          items:
+            type: string
+        name:
+          type: string
+          description: Modality name.
+        operationDays:
+          type: array
+          description: Modality operation days.
+          items:
+            $ref: '#/components/schemas/OperationDayDTO'
+        rates:
+          type: array
+          description: Modality rates.
+          items:
+            type: string
+        releases:
+          type: array
+          description: Modality releases.
+          items:
+            $ref: '#/components/schemas/ReleaseDTO'
+        sessions:
+          type: array
+          description: Modality sessions.
+          items:
+            type: string
+    OperationDayDTO:
+      title: OperationDayDTO
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - MON
+          - TUE
+          - WED
+          - THU
+          - FRI
+          - SAT
+          - SUN
+          - NOA
+        name:
+          type: string
+    PaxPriceDTO:
+      title: PaxPriceDTO
+      type: object
+      properties:
+        ageFrom:
+          type: integer
+          format: int32
+        ageTo:
+          type: integer
+          format: int32
+        boxOfficeAmount:
+          type: number
+        mandatoryApplyAmount:
+          type: boolean
+        paxType:
+          type: string
+          enum:
+          - ADULT
+          - CHILD
+          - INFANT
+    ReleaseDTO:
+      title: ReleaseDTO
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int32
+        day:
+          type: string
+          enum:
+          - MON
+          - TUE
+          - WED
+          - THU
+          - FRI
+          - SAT
+          - SUN
+          - NOA
+        unit:
+          type: string
+          enum:
+          - UNIT
+          - HOURS
+          - DAYS
+  securitySchemes:
+    Apikey:
+      type: apiKey
+      name: Api-key
+      description: Your registered API key
+      in: header
+    Xsignature:
+      type: apiKey
+      name: X-Signature
+      description: SHA256 encoding signature
+      in: header
+security:
+  - Apikey: []
+    XSignature:  []

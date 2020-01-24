@@ -1,0 +1,1327 @@
+openapi: 3.0.1
+info:
+  title: Transfer Cache API
+  description: |
+    # APItude Transfer Cache API 
+    APItude also includes now the ability to download the transfers content & portfolio. This API will provide you with availability to **cache and download the routes operated by transfer services and as well as the rest of the static content**, like terminals, pickup points and such.
+    
+    APItude transfers CACHE API is designed to provide Hotelbeds Group clients with a set of API calls to download:
+    
+
+    * Routes
+    * Pickup points
+    * Hotels
+    * Currencies
+    * Master Data (Transfer types, Categories & Vehicle types)
+    * Locations (countries, destinations & terminals)
+
+    APItude Transfers CACHE API is delivered via HTTPS GET requests. Reesponse data is returned in JSON, allowing you to easily build requests and parse responses in a standard way by using the tools included with most of the modern languages. Every exposed HTTP resource allows every client to create paginated responses by means of using offset & limit attributes.
+    
+  termsOfService: https://developer.hotelbeds.com/API_Terms_of_Use
+  contact:
+    name: BTB Support
+    url: 'https://developer.hotelbeds.com'
+    email: integrations.btb@hotelbeds.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: '1.0'
+externalDocs:
+  description: Find out more about APItude
+  url: https://developer.hotelbeds.com
+servers:
+- url: 'https://api.test.hotelbeds.com/transfer-cache-api/1.0'
+  variables: {}
+tags:
+- name: Cache Management
+  description: Cache Management Controller
+- name: Country portfolio
+  description: Country Controller
+- name: Currency portfolio
+  description: Currency Controller
+- name: Destinations portfolio
+  description: Destination Controller
+- name: Hotels portfolio
+  description: Hotels Controller
+- name: Masters
+  description: Master Category Controller
+- name: Pickups portfolio
+  description: Pickup Controller
+- name: Route portfolio
+  description: Route Controller
+- name: Terminals portfolio
+  description: Terminal Controller
+paths:
+  /currencies:
+    get:
+      tags:
+      - Currency portfolio
+      summary: Currency portfolio
+      description: Returns a Response with a list of currencies
+      operationId: currency
+      parameters:
+      - name: fields
+        in: query
+        description: Fields that will be informed in the response object.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: language
+        in: query
+        description: Language ISO code in which the response data will be translated
+          into in the response object.
+        required: true
+        schema:
+          type: string
+      - name: codes
+        in: query
+        description: Specific country code(s) that will be returned in the response
+          object, if it(they) exist(s).
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: offset
+        in: query
+        description: Used for pagination. Index of the item from which the list will
+          be generated in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: limit
+        in: query
+        description: Used for pagination. Number of items from the index indicated
+          by the offset parameter that will be included in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      responses:
+        200:
+          description: Response OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/CurrencyDTO'
+        204:
+          description: No content
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /hotels:
+    get:
+      tags:
+      - Hotels portfolio
+      summary: Hotel portfolio
+      description: Returns a Response with a list of hotels
+      operationId: hotel
+      parameters:
+      - name: fields
+        in: query
+        description: Fields that will be informed in the response object.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: offset
+        in: query
+        description: Used for pagination. Index of the item from which the list will
+          be generated in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: limit
+        in: query
+        description: Used for pagination. Number of items from the index indicated
+          by the offset parameter that will be included in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: language
+        in: query
+        description: Language ISO code in which the response data will be translated
+          into in the response object.
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: countryCodes
+        in: query
+        description: Specific country code(s) that will be returned in the response
+          object, if it(they) exist(s).
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: destinationCodes
+        in: query
+        description: Specific destination code(s) that will be returned in the response
+          object, if it(they) exist(s).
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: codes
+        in: query
+        description: Specific hotel code(s) that will be returned in the response
+          object, if it(they) exist(s).
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+      - name: giataCodes
+        in: query
+        description: Specific giata hotel code(s) that will be returned in the response
+          object, if it(they) exist(s).
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Response OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Hotel'
+        204:
+          description: No content
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /locations/countries:
+    get:
+      tags:
+      - Country portfolio
+      summary: Country portfolio
+      description: Returns a Response with a list of countries
+      operationId: country
+      parameters:
+      - name: fields
+        in: query
+        description: Fields that will be informed in the response object.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: offset
+        in: query
+        description: Used for pagination. Index of the item from which the list will
+          be generated in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: limit
+        in: query
+        description: Used for pagination. Number of items from the index indicated
+          by the offset parameter that will be included in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: language
+        in: query
+        description: Language ISO code in which the response data will be translated
+          into in the response object.
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: codes
+        in: query
+        description: Specific country code(s) that will be returned in the response
+          object, if it(they) exist(s).
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        200:
+          description: Response OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Country'
+        204:
+          description: No content
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /locations/destinations:
+    get:
+      tags:
+      - Destinations portfolio
+      summary: Destination portfolio
+      description: Returns a Response with a list of destinations
+      operationId: destination
+      parameters:
+      - name: fields
+        in: query
+        description: Fields that will be informed in the response object.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: offset
+        in: query
+        description: Used for pagination. Index of the item from which the list will
+          be generated in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: limit
+        in: query
+        description: Used for pagination. Number of items from the index indicated
+          by the offset parameter that will be included in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: language
+        in: query
+        description: Language ISO code in which the response data will be translated
+          into in the response object.
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: countryCodes
+        in: query
+        description: Specific country code(s) that will be returned in the response
+          object, if it(they) exist(s).
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: codes
+        in: query
+        description: Specific destination code(s) that will be returned in the response
+          object, if it(they) exist(s).
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        200:
+          description: Response OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/DestinationDTO'
+        204:
+          description: No content
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /locations/terminals:
+    get:
+      tags:
+      - Terminals portfolio
+      summary: Terminals portfolio
+      description: Returns a Response with a list of terminals
+      operationId: terminal
+      parameters:
+      - name: fields
+        in: query
+        description: Fields that will be informed in the response object.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: offset
+        in: query
+        description: Used for pagination. Index of the item from which the list will
+          be generated in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: limit
+        in: query
+        description: Used for pagination. Number of items from the index indicated
+          by the offset parameter that will be included in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: language
+        in: query
+        description: Language ISO code in which the response data will be translated
+          into in the response object.
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: countryCodes
+        in: query
+        description: Specific country code(s) that will be returned in the response
+          object, if it(they) exist(s).
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: codes
+        in: query
+        description: Specific terminals code(s) that will be returned in the response
+          object, if it(they) exist(s).
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        200:
+          description: Response OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Terminal'
+        204:
+          description: No content
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /masters/categories:
+    get:
+      tags:
+      - Masters
+      summary: Master Category portfolio
+      description: Returns a Response with a list of category masters
+      operationId: masters
+      parameters:
+      - name: fields
+        in: query
+        description: Fields that will be informed in the response object.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: offset
+        in: query
+        description: Used for pagination. Index of the item from which the list will
+          be generated in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: limit
+        in: query
+        description: Used for pagination. Number of items from the index indicated
+          by the offset parameter that will be included in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: language
+        in: query
+        description: Language ISO code in which the response data will be translated
+          into in the response object.
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: codes
+        in: query
+        description: Specific category code(s) that will be returned in the response
+          object, if it(they) exist(s).
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        200:
+          description: Response OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/MasterCategory'
+        204:
+          description: No content
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /masters/transferTypes:
+    get:
+      tags:
+      - Masters
+      summary: Master Transfer Type portfolio
+      description: Returns a Response with a list of transfer type masters
+      operationId: masters_1
+      parameters:
+      - name: fields
+        in: query
+        description: Fields that will be informed in the response object.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: offset
+        in: query
+        description: Used for pagination. Index of the item from which the list will
+          be generated in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: limit
+        in: query
+        description: Used for pagination. Number of items from the index indicated
+          by the offset parameter that will be included in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: language
+        in: query
+        description: Language ISO code in which the response data will be translated
+          into in the response object.
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: codes
+        in: query
+        description: Specific category code(s) that will be returned in the response
+          object, if it(they) exist(s).
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        200:
+          description: Response OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/MasterTransferType'
+        204:
+          description: No content
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /masters/vehicles:
+    get:
+      tags:
+      - Masters
+      summary: Master Vehicle portfolio
+      description: Returns a Response with a list of vehicle masters
+      operationId: masters_2
+      parameters:
+      - name: fields
+        in: query
+        description: Fields that will be informed in the response object.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: offset
+        in: query
+        description: Used for pagination. Index of the item from which the list will
+          be generated in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: limit
+        in: query
+        description: Used for pagination. Number of items from the index indicated
+          by the offset parameter that will be included in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: language
+        in: query
+        description: Language ISO code in which the response data will be translated
+          into in the response object.
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: codes
+        in: query
+        description: Specific vehicle code(s) that will be returned in the response
+          object, if it(they) exist(s).
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        200:
+          description: Response OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/MasterVehicle'
+        204:
+          description: No content
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /pickups:
+    get:
+      tags:
+      - Pickups portfolio
+      summary: Pickup portfolio
+      description: Returns a Response with a list of pickups
+      operationId: pickup
+      parameters:
+      - name: fields
+        in: query
+        description: Fields that will be informed in the response object.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: offset
+        in: query
+        description: Used for pagination. Index of the item from which the list will
+          be generated in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: limit
+        in: query
+        description: Used for pagination. Number of items from the index indicated
+          by the offset parameter that will be included in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: language
+        in: query
+        description: Language ISO code in which the response data will be translated
+          into in the response object.
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: countryCodes
+        in: query
+        description: Specific country code(s) that will be returned in the response
+          object, if it(they) exist(s).
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: codes
+        in: query
+        description: Specific hotel code(s) that will be returned in the response
+          object, if it(they) exist(s).
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Response OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/PickupDTO'
+        204:
+          description: No content
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /private/caches:
+    get:
+      tags:
+      - Cache Management
+      summary: Cache management
+      description: List all caches
+      operationId: listAll
+      responses:
+        200:
+          description: Response OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CacheInfo'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /private/caches/reload:
+    get:
+      tags:
+      - Cache Management
+      summary: Cache management
+      description: Reloads all caches
+      operationId: reloadAll
+      responses:
+        200:
+          description: Response OK
+          content: {}
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /private/caches/{cacheRepositoryName}/reload:
+    get:
+      tags:
+      - Cache Management
+      summary: Cache management
+      description: Reloads the cache indicated
+      operationId: reload
+      parameters:
+      - name: cacheRepositoryName
+        in: path
+        description: Indicates the name of the cache to be reloaded.
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Response OK
+          content: {}
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+  /routes:
+    get:
+      tags:
+      - Route portfolio
+      summary: Route portfolio
+      description: Returns a Response with a list of routes
+      operationId: route
+      parameters:
+      - name: fields
+        in: query
+        description: Fields that will be informed in the response object.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: offset
+        in: query
+        description: Used for pagination. Index of the item from which the list will
+          be generated in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: limit
+        in: query
+        description: Used for pagination. Number of items from the index indicated
+          by the offset parameter that will be included in the response object.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: destinationCode
+        in: query
+        description: Destination code(s) that will be returned in the response object,
+          if it(they) exist(s).
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Response OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Route'
+        204:
+          description: No content
+          content: {}
+        400:
+          description: 'Bad request: Data validation error'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        401:
+          description: 'Unauthorized: invalid or expired token'
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        404:
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        500:
+          description: Not handled error
+          content: {}
+      security:
+      - Api-key: []
+components:
+  schemas:
+    CacheInfo:
+      title: CacheInfo
+      type: object
+      properties:
+        active:
+          type: boolean
+          description: Cache is active.
+          example: false
+        chunkSize:
+          type: integer
+          description: Cache chunk size.
+          format: int32
+        count:
+          type: integer
+          description: Cache count.
+          format: int32
+        executionTime:
+          type: string
+          description: Cache execution time.
+        name:
+          type: string
+          description: Cache name.
+      description: The Cache Information Object.
+    Content:
+      title: Content
+      type: object
+      properties:
+        description:
+          type: string
+        type:
+          type: string
+      description: Terminal content
+    Coordinates:
+      title: Coordinates
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+      description: Terminal coordinates
+    Country:
+      title: Country
+      type: object
+      properties:
+        code:
+          type: string
+          description: Country code.
+        name:
+          type: string
+          description: Country name.
+      description: The Country Object.
+    CurrencyDTO:
+      title: CurrencyDTO
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+    DestinationDTO:
+      title: DestinationDTO
+      type: object
+      properties:
+        code:
+          type: string
+        countryCode:
+          type: string
+        language:
+          type: string
+        name:
+          type: string
+    ErrorDTO:
+      title: ErrorDTO
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        dateTime:
+          type: string
+          description: Time and date the error was thrown
+        description:
+          type: string
+          description: Error description
+        fieldErrors:
+          type: array
+          description: List of errors caused by field validations
+          items:
+            $ref: '#/components/schemas/FieldErrorDTO'
+        isBadRequest:
+          type: boolean
+          description: The error is caused by a bad request from client, it's not
+            due to an internal service
+          example: false
+        message:
+          type: string
+          description: Error message
+        nestedError:
+          $ref: '#/components/schemas/ErrorDTO'
+        serviceName:
+          type: string
+          description: The name of the service that threw this error
+        traceId:
+          type: string
+          description: The trace ID
+    FieldErrorDTO:
+      title: FieldErrorDTO
+      type: object
+      properties:
+        code:
+          type: string
+          description: The field error code
+        field:
+          type: string
+          description: The name of the field with the error
+        message:
+          type: string
+          description: The field error message
+    Hotel:
+      title: Hotel
+      type: object
+      properties:
+        address:
+          type: string
+          description: Hotel address.
+        category:
+          type: string
+          description: Hotel category.
+        chainCode:
+          type: string
+          description: Hotel chain code.
+        city:
+          type: string
+          description: Hotel city.
+        code:
+          type: string
+          description: Hotel code.
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+        countryCode:
+          type: string
+          description: Country code.
+        description:
+          type: string
+          description: Hotel description.
+        destinationCode:
+          type: string
+          description: Destination name.
+        giataCode:
+          type: string
+          description: Giata Hotel code.
+        name:
+          type: string
+          description: Hotel name.
+        postalCode:
+          type: string
+          description: Hotel postal code.
+      description: The Hotel Object.
+    MasterCategory:
+      title: MasterCategory
+      type: object
+      properties:
+        description:
+          type: string
+          description: Master Category description.
+        masterCategoryCode:
+          type: string
+          description: Master Category code.
+        masterTransferTypeCode:
+          type: string
+          description: Master Transfer Type code.
+        name:
+          type: string
+          description: Master Category name.
+      description: The Master Category Object.
+    MasterTransferType:
+      title: MasterTransferType
+      type: object
+      properties:
+        code:
+          type: string
+          description: Master Transfer Type code.
+        description:
+          type: string
+          description: Master Tranfer Type description.
+        name:
+          type: string
+          description: Master Transfer Type name.
+      description: The Master Transfer Type Object.
+    MasterVehicle:
+      title: MasterVehicle
+      type: object
+      properties:
+        description:
+          type: string
+          description: Master Vehicle description.
+        masterCategoryCode:
+          type: string
+          description: Master Category code.
+        masterTransferTypeCode:
+          type: string
+          description: Master Transfer Type code.
+        masterVehicleCode:
+          type: string
+          description: Master Vehicle code.
+        name:
+          type: string
+          description: Master Vehicle name.
+      description: The Master Vehicle Object.
+    PickupDTO:
+      title: PickupDTO
+      type: object
+      properties:
+        address:
+          type: string
+        city:
+          type: string
+        code:
+          type: integer
+          format: int32
+        companyCode:
+          type: string
+        countryCode:
+          type: string
+        hotelCode:
+          type: integer
+          format: int32
+        isTerminal:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        name:
+          type: string
+        officeCode:
+          type: integer
+          format: int32
+        postalCode:
+          type: string
+        providerCode:
+          type: integer
+          format: int32
+        receptiveCode:
+          type: integer
+          format: int32
+        serviceType:
+          type: string
+        webCheckpickup:
+          type: boolean
+        zoneCode:
+          type: string
+    Route:
+      title: Route
+      type: object
+      properties:
+        code:
+          type: string
+          description: Route code.
+        from:
+          $ref: '#/components/schemas/RoutePoint'
+        to:
+          $ref: '#/components/schemas/RoutePoint'
+      description: The Route Object.
+    RoutePoint:
+      title: RoutePoint
+      type: object
+      properties:
+        code:
+          type: string
+          description: Transfer Point code.
+        type:
+          type: string
+          description: Transfer Point type.
+          enum:
+          - GIATA
+          - ATLAS
+          - IATA
+          - PORT
+          - STATION
+          - GPS
+      description: The Route Point Object.
+    Terminal:
+      title: Terminal
+      type: object
+      properties:
+        code:
+          type: string
+          description: Terminal code.
+        content:
+          $ref: '#/components/schemas/Content'
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+        countryCode:
+          type: string
+          description: Country code.
+        language:
+          type: string
+          description: Language
+      description: The Terminal Object.
+  securitySchemes:
+    Api-key:
+      type: apiKey
+      name: Api-key
+      in: header

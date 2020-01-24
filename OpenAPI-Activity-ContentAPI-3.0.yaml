@@ -1,0 +1,592 @@
+openapi: 3.0.0
+info:
+  title: Activity Content API
+  description: >-
+    # APItude Activity Content API
+    
+    The CONTENT API contains the set of calls returning useful information
+    regarding:
+
+    * Auxiliary data (countries, destinations… etc). See all content in this
+    section for specs and details for each auxiliary operation.
+
+    * Contents for activities (images, commercial descriptions and specific
+    details). See below for details regarding the contents factsheet.
+
+
+    The contents factsheet is built with a set of attributes that contain all
+    the information that describe a product or set of products. Some of the
+    information provided will be relevant to be presented to the final consumer
+    when offering the product or service.
+
+
+    From a data perspective, a contents factsheet can be used by 1 or more
+    services and a service contains 1 or more modalities.
+
+
+    Details for the contents factsheet are explained in the response section,
+    specifications an explanation can be found for each contents factsheet
+    attribute.
+  termsOfService: 'https://developer.hotelbeds.com/API_Terms_of_Use'
+  contact:
+    name: BTB Support
+    url: 'https://developer.hotelbeds.com'
+    email: integrations.btb@hotelbeds.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: '3.0'
+externalDocs:
+  description: Find out more about APItude
+  url: https://developer.hotelbeds.com
+servers:
+  - url: 'https://api.test.hotelbeds.com/activity-content-api/3.0'
+    variables: {}
+tags:
+  - name: Operations
+    description: Rest Frontend Service Implementation
+paths:
+  /languages:
+    get:
+      tags:
+        - Operations
+      summary: Languages
+      description: >-
+        Returns the list of available languages that are used for both the
+        languages for the requests and the languages for the activities in
+        regards to the available ones to be chosen from.
+      operationId: Languages
+      parameters:
+        - name: Api-key
+          in: header
+          description: API Key used in the request
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{Api-key}}'
+        - name: X-Signature
+          in: header
+          description: Authentication X-Signature
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{X-Signature}}'
+        - name: Accept
+          in: header
+          description: >-
+            Response format, posible values are application/xml and
+            application/json
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: application/json
+        - name: Accept-Encoding
+          in: header
+          description: Defines type of encoding used on the data
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: gzip
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  '/currencies/{language}':
+    get:
+      tags:
+        - Operations
+      summary: Currencies
+      description: Returns the list of available currencies
+      operationId: Currencies
+      parameters:
+        - name: Api-key
+          in: header
+          description: API Key used in the request
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{Api-key}}'
+        - name: X-Signature
+          in: header
+          description: Authentication X-Signature
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{X-Signature}}'
+        - name: Accept
+          in: header
+          description: >-
+            Response format, posible values are application/xml and
+            application/json
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: application/json
+        - name: Accept-Encoding
+          in: header
+          description: Defines type of encoding used on the data
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: gzip
+        - name: language
+          in: path
+          description: >-
+            Language in which the description texts will be returned in the
+            response
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: en
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  '/segments/{language}':
+    get:
+      tags:
+        - Operations
+      summary: Segments
+      description: Returns the available segmentation for a contents factsheet.
+      operationId: Segments
+      parameters:
+        - name: Api-key
+          in: header
+          description: API Key used in the request
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{Api-key}}'
+        - name: X-Signature
+          in: header
+          description: Authentication X-Signature
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{X-Signature}}'
+        - name: Accept
+          in: header
+          description: >-
+            Response format, posible values are application/xml and
+            application/json
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: application/json
+        - name: Accept-Encoding
+          in: header
+          description: Defines type of encoding used on the data
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: gzip
+        - name: language
+          in: path
+          description: >-
+            Language in which the description texts will be returned in the
+            response
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: en
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  '/countries/{language}':
+    get:
+      tags:
+        - Operations
+      summary: Countries
+      description: Returns the list of available countries.
+      operationId: Countries
+      parameters:
+        - name: Api-key
+          in: header
+          description: API Key used in the request
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{Api-key}}'
+        - name: X-Signature
+          in: header
+          description: Authentication X-Signature
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{X-Signature}}'
+        - name: Accept
+          in: header
+          description: >-
+            Response format, posible values are application/xml and
+            application/json
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: application/json
+        - name: Accept-Encoding
+          in: header
+          description: Defines type of encoding used on the data
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: gzip
+        - name: language
+          in: path
+          description: >-
+            Language in which the description texts will be returned in the
+            response
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: en
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  '/destinations/{language}/{country}':
+    get:
+      tags:
+        - Operations
+      summary: Destinations
+      description: Returns the list of available destinations in a country.
+      operationId: Destinations
+      parameters:
+        - name: Api-key
+          in: header
+          description: API Key used in the request
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{Api-key}}'
+        - name: X-Signature
+          in: header
+          description: Authentication X-Signature
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{X-Signature}}'
+        - name: Accept
+          in: header
+          description: >-
+            Response format, posible values are application/xml and
+            application/json
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: application/json
+        - name: Accept-Encoding
+          in: header
+          description: Defines type of encoding used on the data
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: gzip
+        - name: language
+          in: path
+          description: >-
+            Language in which the description texts will be returned in the
+            response
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: en
+        - name: country
+          in: path
+          description: Country code of the requested destinations
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: FR
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  '/activities/{language}/{activity}/{modality}':
+    get:
+      tags:
+        - Operations
+      summary: Content SINGLE
+      description: >-
+        Returns a single factsheet by service code and, optionally, modality,
+        etc.
+      operationId: ContentSimple
+      parameters:
+        - name: Api-key
+          in: header
+          description: API Key used in the request
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{Api-key}}'
+        - name: X-Signature
+          in: header
+          description: Authentication X-Signature
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{X-Signature}}'
+        - name: Accept
+          in: header
+          description: >-
+            Response format, posible values are application/xml and
+            application/json
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: application/json
+        - name: Accept-Encoding
+          in: header
+          description: Defines type of encoding used on the data
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: gzip
+        - name: language
+          in: path
+          description: >-
+            Language in which the description texts will be returned in the
+            response
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: en
+        - name: activity
+          in: path
+          description: >-
+            Activity code. Service codes can be retrieved from the search
+            operation results.
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: E-E10-000200515
+        - name: modality
+          in: path
+          description: >-
+            Modality code. Modality codes are also returned by the Search
+            operation.
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: 8
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /activities:
+    post:
+      tags:
+        - Operations
+      summary: Contents MULTI
+      description: >-
+        Returns a set of contents factsheet by a given set of service codes and,
+        optionally, modalities, etc.
+      operationId: ContentsMulti
+      parameters:
+        - name: Api-key
+          in: header
+          description: API Key used in the request
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{Api-key}}'
+        - name: X-Signature
+          in: header
+          description: Authentication X-Signature
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{X-Signature}}'
+        - name: Accept
+          in: header
+          description: >-
+            Response format, posible values are application/xml and
+            application/json
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: application/json
+        - name: Accept-Encoding
+          in: header
+          description: Defines type of encoding used on the data
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: gzip
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContentsMultiRequest'
+            example:
+              codes:
+                - activityCode: E-E10-000200515
+                  modalityCodes:
+                    - PEPE
+                    - '2'
+                - activityCode: E-E10-JAMONEXPER
+                  modalityCodes:
+                    - PEPE
+              language: en
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  '/hotels/{language}/{destination}':
+    get:
+      tags:
+        - Operations
+      summary: Hotels
+      description: >-
+        Returns the list of available hotels for activities. **Important note:**
+        this is different from the hotels listed and available in [Hotel Content
+        API](https://developer.hotelbeds.com/docs/read/APITUDE_CONTENT).
+      operationId: Hotels
+      parameters:
+        - name: Api-key
+          in: header
+          description: API Key used in the request
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{Api-key}}'
+        - name: X-Signature
+          in: header
+          description: Authentication X-Signature
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: '{{X-Signature}}'
+        - name: Accept
+          in: header
+          description: >-
+            Response format, posible values are application/xml and
+            application/json
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: application/json
+        - name: Accept-Encoding
+          in: header
+          description: Defines type of encoding used on the data
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: gzip
+        - name: language
+          in: path
+          description: >-
+            Language in which the description texts will be returned in the
+            response
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: en
+        - name: destination
+          in: path
+          description: Destination code of the requested hotels
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: PMI
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+components:
+  schemas:
+    ContentsMultiRequest:
+      title: ContentsMultiRequest
+      required:
+        - codes
+        - language
+      type: object
+      properties:
+        codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Code'
+          description: ''
+        language:
+          type: string
+      example:
+        codes:
+          - activityCode: E-E10-000200515
+            modalityCodes:
+              - PEPE
+              - '2'
+          - activityCode: E-E10-JAMONEXPER
+            modalityCodes:
+              - PEPE
+        language: en
+    Code:
+      title: Code
+      required:
+        - activityCode
+        - modalityCodes
+      type: object
+      properties:
+        activityCode:
+          type: string
+        modalityCodes:
+          type: array
+          items:
+            type: string
+          description: ''
+      example:
+        activityCode: E-E10-000200515
+        modalityCodes:
+          - PEPE
+          - '2'
