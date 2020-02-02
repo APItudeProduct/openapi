@@ -2901,7 +2901,7 @@ components:
           format: date
           xml:
             attribute: true
-        hotel:
+        hotels:
           type: array
           items:
             $ref: '#/components/schemas/ApiHotel'
@@ -3753,7 +3753,7 @@ components:
           example: ENG
           xml:
             attribute: true
-        occupancy:
+        occupancies:
           type: array
           xml:
             name: occupancies
