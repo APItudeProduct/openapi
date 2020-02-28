@@ -10,7 +10,7 @@ info:
     making cancellations and modify existing bookings.
     
     Hotel Booking API works in combination
-    with [Hotel Content API]() to obtain content information from the hotels, such as pictures,
+    with [Hotel Content API](/documentation/hotels/content-api/api-reference/) to obtain content information from the hotels, such as pictures,
     description, facilities, services, etc. Please refer to the Hotel Content API documentation
     and IO/DOCS for related information.
     
@@ -82,7 +82,7 @@ paths:
                 description: |-
                   Search availability by hotel code list. Up to 2,000 hotel codes can be requested in one request.
                   
-                  Hotel codes can be obtained from [Hotel Content API]().
+                  Hotel codes can be obtained from [Hotel Content API](/documentation/hotels/content-api/api-reference/).
                 value: |-
                   <?xml version="1.0" encoding="UTF-8"?>
                   <availabilityRQ xmlns="http://www.hotelbeds.com/schemas/messages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -120,7 +120,7 @@ paths:
               Ex3:  # Example 3
                 summary: Availability by destination
                 description: |-
-                  Search availability based on destination codes from the Hotelbeds destination tree (available in [Hotel Content API]()).
+                  Search availability based on destination codes from the Hotelbeds destination tree (available in [Hotel Content API](/documentation/hotels/content-api/api-reference/)).
                 
                   **Important**: Please note that the recommended search types are by Hotel code and by GPS coordinates. Search by destination is disabled by default, to apply for activation please contact our support team.
                 value: |-
@@ -141,7 +141,7 @@ paths:
                 description: |-
                   Search availability by hotel code list. Up to 2,000 hotel codes can be requested in one request.
                   
-                  Hotel codes can be obtained from [Hotel Content API]().
+                  Hotel codes can be obtained from [Hotel Content API](/documentation/hotels/content-api/api-reference/).
                 value:
                   stay:
                     checkIn: '2020-06-15'
@@ -182,7 +182,7 @@ paths:
               Ex3:  # Example 3
                 summary: Availability by destination
                 description: |-
-                  Search availability based on destination codes from the Hotelbeds destination tree (available in [Hotel Content API]()).
+                  Search availability based on destination codes from the Hotelbeds destination tree (available in [Hotel Content API](/documentation/hotels/content-api/api-reference/)).
                 
                   **Important**: Please note that the recommended search types are by Hotel code and by GPS coordinates. Search by destination is disabled by default, to apply for activation please contact our support team.
                 value:
@@ -3972,7 +3972,7 @@ components:
       properties:
         board:
           type: array
-          description: List of board type codes to filter by. You can get all the possible board type code values through the board types operation of [Hotel Content API]().
+          description: List of board type codes to filter by. You can get all the possible board type code values through the board types operation of [Hotel Content API](/documentation/hotels/content-api/api-reference/).
           items:
             type: string
         included:
@@ -4936,7 +4936,7 @@ components:
           $ref: '#/components/schemas/ApiCost'
         rateCommentsId:
           type: string
-          description: Comments associated to this rate (more information on [Hotel Content API]() ).
+          description: Comments associated to this rate (more information on [Hotel Content API](/documentation/hotels/content-api/api-reference/) ).
           xml:
             attribute: true
         rateComments:
@@ -5228,7 +5228,7 @@ components:
       properties:
         room:
           type: array
-          description: List of room type codes to filter by. You can get all the possible room type code values through the room types operation of [Hotel Content API]().
+          description: List of room type codes to filter by. You can get all the possible room type code values through the room types operation of [Hotel Content API](/documentation/hotels/content-api/api-reference/).
           items:
             type: string
         included:
