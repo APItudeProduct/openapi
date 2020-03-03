@@ -17,10 +17,10 @@ info:
     Hotel Booking API has been designed for a
     two steps confirmation, but due the the complexity of client and providers systems
     a third method has been designed.
-  termsOfService: https://developer.hotelbeds.com/API_Terms_of_Use
+  termsOfService: https://developer-beta.hotelbeds.com/api-terms-use
   contact:
     name: Apitude Support
-    url: https://developer.hotelbeds.com
+    url: https://developer-beta.hotelbeds.com
     email: apitude@hotelbeds.com
   license:
     name: Apache 2.0
@@ -28,7 +28,7 @@ info:
   version: '1.0'
 externalDocs:
   description: Find out more about APItude
-  url: https://developer.hotelbeds.com
+  url: https://developer-beta.hotelbeds.com
 servers:
 - url: https://api.test.hotelbeds.com/hotel-api/{version}
   variables:
@@ -2871,6 +2871,8 @@ paths:
           *  Booking paxes
           *  Hotel, rooms and boards confirmed
           *  Booking rates
+          
+        The results are returned in a paginated response that can be filtered with the use of parameters in the request.
       operationId: bookingList
       parameters:
         - $ref: '#/components/parameters/CommonRequestHeaderAccept'
@@ -2878,7 +2880,7 @@ paths:
         - $ref: '#/components/parameters/CommonRequestHeaderContent'
         - name: filterType
           in: query
-          description: This parameter is used to identify wether the bookings list is filtered by check-in date or by booking creation date.
+          description: Parameter used to define wether **start** and **end** fields are filtering by check-in date or by booking creation date.
           schema:
             type: string
             enum:
@@ -2886,7 +2888,7 @@ paths:
             - CREATION
         - name: status
           in: query
-          description: The parameter is used to get all bookings, including or excluding cancelled bookings
+          description: Parameter used to filter results by status. Can be used to include or exclude cancelled bookings.
           schema:
             type: string
             enum:
@@ -2895,26 +2897,26 @@ paths:
             - CANCELLED
         - name: from
           in: query
-          description: Range of bookings to be returned, lowest value.
+          description: Defines the lowest value of the range of bookings to be returned.
           required: true
           schema:
             type: integer
             format: int32
         - name: to
           in: query
-          description: Range of bookings to be returned, highest value.
+          description: Defines the highest value of the range of bookings to be returned.
           required: true
           schema:
             type: integer
             format: int32
         - name: clientReference
           in: query
-          description: Parameter to filter the result by the client reference of the booking.
+          description: Parameter to filter the result by the __clientReference__ field of the booking.
           schema:
             type: string
         - name: country
           in: query
-          description: Parameter to filter the results by the country of the hotel. Can include multiple values separated by commas.
+          description: Parameter to filter the results by the country code of the hotel. Can include multiple values separated by commas.
           style: form
           explode: true
           schema:
@@ -2923,7 +2925,7 @@ paths:
               type: string
         - name: destination
           in: query
-          description: Parameter to filter the results by the destination of the hotel. Can include multiple values separated by commas.
+          description: Parameter to filter the results by the destination code of the hotel. Can include multiple values separated by commas.
           style: form
           explode: true
           schema:
@@ -2932,7 +2934,7 @@ paths:
               type: string
         - name: hotel
           in: query
-          description: Parameter to filter the results by the hotels reserved in the bookings. Can include multiple values separated by commas.
+          description: Parameter to filter the results by the hotel codes. Can include multiple values separated by commas.
           style: form
           explode: true
           schema:
@@ -2947,14 +2949,14 @@ paths:
             type: boolean
         - name: start
           in: query
-          description: Range of dates where the method will look for bookings, lowest value.
+          description: Defines the starting date of the range of bookings to be returned.
           required: true
           schema:
             type: string
             format: date
         - name: end
           in: query
-          description: Range of dates where the method will look for bookings, highest
+          description: Defines the ending date of the range of bookings to be returned.
             value.
           required: true
           schema:
@@ -4112,27 +4114,28 @@ components:
             $ref: '#/components/schemas/ApiPax'
     ApiBookings:
       type: object
-      description: List of bookings.
+      description: List of bookings and related information.
       properties:
         from:
           type: integer
-          description: Initial booking in the paginated response.
+          description: Lowest value of the range of returned bookings.
           format: int32
           xml:
             attribute: true
         to:
           type: integer
-          description: Last booking in the paginated response.
+          description: Highest value of the range of returned bookings.
           format: int32
           xml:
             attribute: true
         total:
           type: number
-          description: Total number of existing bookings in the present search (regardless of pagination).
+          description: Total number of bookings matching the parameters used in the request (regardless of pagination/returned range).
           xml:
             attribute: true
         booking:
           type: array
+          description: List of returned bookings matching the parameters used in the request.
           items:
             $ref: '#/components/schemas/ApiBooking'
     ApiCancellationPolicy:
@@ -4603,8 +4606,11 @@ components:
           xml:
             attribute: true
     ApiHotelsFilter:
+      required:
+      - hotel
       type: object
       description: Defines the list of hotels for hotel search.
+      default: true
       properties:
         included:
           type: boolean
@@ -5550,6 +5556,7 @@ components:
     availabilityRQ:
       required:
       - stay
+      - occupancies
       type: object
       description: Request of Availability operation.
       properties:
