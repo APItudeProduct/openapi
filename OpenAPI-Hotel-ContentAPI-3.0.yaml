@@ -22,7 +22,7 @@ info:
   version: "1.0"
 externalDocs:
   description: Find out more about APItude
-  url: https://developer.hotelbeds.com
+  url: https://developer-beta.hotelbeds.com
 servers:
 - url: https://api.test.hotelbeds.com/hotel-content-api/{version}
   variables:
