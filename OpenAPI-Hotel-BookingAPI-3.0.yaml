@@ -3870,7 +3870,9 @@ paths:
         * list of clientReference ids
         * list of booking Ids
         
-        Alternatively, we offer a push service for you to receive automatic messages each time a booking is reconfirmed. Contact our [support team](apitude@hotelbeds.com) to learn more about this feature.
+        ## Push service
+        
+        Additionally, we offer a push service for you to receive automatic messages each time a booking is reconfirmed. Contact our [support team](apitude@hotelbeds.com) to learn more about this feature.
       operationId: bookingreconfirmation
       parameters:
         - $ref: '#/components/parameters/CommonRequestHeaderAccept'
