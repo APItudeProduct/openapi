@@ -21,7 +21,7 @@ info:
   contact:
     name: Apitude Support
     url: https://developer-beta.hotelbeds.com
-    email: apitude@hotelbeds.com
+    email: developer-beta@hotelbeds.com
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -2918,7 +2918,7 @@ paths:
           in: query
           description: Parameter to filter the results by the country code of the hotel. Can include multiple values separated by commas.
           style: form
-          explode: true
+          explode: false
           schema:
             type: array
             items:
@@ -2927,7 +2927,7 @@ paths:
           in: query
           description: Parameter to filter the results by the destination code of the hotel. Can include multiple values separated by commas.
           style: form
-          explode: true
+          explode: false
           schema:
             type: array
             items:
@@ -2936,7 +2936,7 @@ paths:
           in: query
           description: Parameter to filter the results by the hotel codes. Can include multiple values separated by commas.
           style: form
-          explode: true
+          explode: false
           schema:
             type: array
             items:
@@ -3855,6 +3855,128 @@ paths:
         500:
           $ref: '#/components/responses/500'
       deprecated: false
+  /bookings/reconfirmations:
+    get:
+      tags:
+      - Booking
+      summary: Booking reconfirmation
+      description: |-
+        The Reconfirmation operation allows to retrieve the reconfirmation numbers (The confirmation number of the Hotel, both for the Hotelbeds product and for that of external suppliers product) of the bookings made by the client when requested in a GET call to our endpoint.
+
+        The Reconfirmation operation offers a wide variety of filters to help narrowing down reconfirmation number results. Only one filter can be used at the same time. Below the four possible filters you can use:
+        
+        * between two cheking dates
+        * between two reconfirmation dates
+        * list of clientReference ids
+        * list of booking Ids
+        
+        Alternatively, we offer a push service for you to receive automatic messages each time a booking is reconfirmed. Contact our [support team](apitude@hotelbeds.com) to learn more about this feature.
+      operationId: bookingreconfirmation
+      parameters:
+        - $ref: '#/components/parameters/CommonRequestHeaderAccept'
+        - $ref: '#/components/parameters/CommonRequestHeaderAcceptEncoding'
+        - name: from
+          in: query
+          description: 'Lowest value of the range of bookings with supplierConfirmationCodes to be returned (as in a paginated response).'
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1
+        - name: to
+          in: query
+          description: 'Highest value of the range of bookings with supplierConfirmationCodes to be returned (as in a paginated response).'
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 10
+        - name: start
+          in: query
+          description: 'Date from when the method will start checking reconfirmation numbers. The format must be YYYY-MM-DD. In case of using __start__ and __end__ parameters, the use of __filterType__ parameter is mandatory.'
+          required: false
+          schema:
+            type: string
+            format: date
+            example: '2020-01-10'
+        - name: end
+          in: query
+          description: 'Date to when the method will finish checking reconfirmation numbers. The format must be YYYY-MM-DD. In case of using __start__ and __end__ parameters, the use of __filterType__ parameter is mandatory.'
+          required: false
+          schema:
+            type: string
+            format: date
+            example: '2020-01-15'
+        - name: filterType
+          in: query
+          description: |-
+            The parameter is used to identify if the reconfirmation numbers is by check-in date or by reconfirmation date. Values:
+            
+            * CHECKIN: for the check-in date.
+            * RECONFIRMATION: for the reconfirmation date the booking was included in Hotelbeds systems.
+
+            In case of using __filterType__ parameters, the use of __start__ and __end__ parameters is mandatory.
+          required: false
+          schema:
+            type: string
+            enum:
+            - CHECKIN
+            - RECONFIRMATION
+        - name: clientReferences
+          in: query
+          description: 'Parameter to filter the results by the booking reference in client API side.Can include multiple values separated by ",". Max 80 values.'
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: XX270220113856831889,XX270220113856831889
+        - name: references
+          in: query
+          description: 'Parameter to filter the results by the booking reference in Hotelbeds side.Can include multiple values separated by ",". Max 80 values.'
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: 77-1322905,77-1322904
+      responses:
+        200:
+          description: Sucessful response
+          content:
+            application/json:
+              example:
+                auditData:
+                  processTime: '2125'
+                  timestamp: '2020-02-12 08:43:59.876'
+                  requestHost: '0:0:0:0:0:0:0:1'
+                  serverId: 'PMI-L-7RDKRV2#A+'
+                  environment: '[local, awseuwest1]'
+                  release: 97aaaf050e97f38dba4b0be9075523e501bf3dc7
+                  token: 87AB1EF792B8415F8FAE352076795DF3
+                  internal: null||||0|0||||||||||||0|||0|0||0|null|||
+                bookings:
+                  - reference: 1-3423498
+                    clientReference: R3342223421
+                    hotel:
+                      rooms:
+                        - id: 10
+                          code: DBL.ST
+                          supplierConfirmationCode:
+                            - HIL_Conf_444322
+                  - reference: 1-3423499
+                    clientReference: R3342223425
+                    hotel:
+                      rooms:
+                        - id: 10
+                          code: DBL.ST
+                          supplierConfirmationCode:
+                            - HIL_Conf_444322
+                
 components:
   parameters:
     CommonRequestHeaderAccept:
@@ -4074,11 +4196,11 @@ components:
           example: USD
           xml:
             attribute: true
-        bookingFileReference:
-          deprecated: true
-          type: string
-          xml:
-            attribute: true
+        # bookingFileReference:
+          # deprecated: true
+          # type: string
+          # xml:
+            # attribute: true
         hotel:
           $ref: '#/components/schemas/ApiHotel'
     ApiBookingDevice:
@@ -4172,18 +4294,18 @@ components:
           description: Penalty that will be applied for cancellations after the indicated date, represented as a number of nights.
           xml:
             attribute: true
-    ApiCost:
-      type: object
-      deprecated: true
-      properties:
-        amount:
-          type: number
-          xml:
-            attribute: true
-        currency:
-          type: string
-          xml:
-            attribute: true
+    # ApiCost:
+      # type: object
+      # deprecated: true
+      # properties:
+        # amount:
+          # type: number
+          # xml:
+            # attribute: true
+        # currency:
+          # type: string
+          # xml:
+            # attribute: true
     ApiCreditCard:
       type: object
       description: Information on the accepted credit card.
@@ -4441,11 +4563,11 @@ components:
           description: Hotel description.
           xml:
             attribute: true
-        image:
-          type: string
-          xml:
-            attribute: true
-          deprecated: true
+        # image:
+          # type: string
+          # xml:
+            # attribute: true
+          # deprecated: true
         exclusiveDeal:
           type: integer
           description: Indicates Hotelbeds preferential/priority product. The feature to return this attribuite is deactivated by default, will be activated upon client request.
@@ -4612,20 +4734,20 @@ components:
       description: Defines the list of hotels for hotel search.
       default: true
       properties:
-        included:
-          type: boolean
-          xml:
-            attribute: true
-          default: false
-          deprecated: true
-        type:
-          type: string
-          xml:
-            attribute: true
-          enum:
-          - HOTELBEDS
-          - GIATA
-          deprecated: true
+        # included:
+          # type: boolean
+          # xml:
+            # attribute: true
+          # default: false
+          # deprecated: true
+        # type:
+          # type: string
+          # xml:
+            # attribute: true
+          # enum:
+          # - HOTELBEDS
+          # - GIATA
+          # deprecated: true
         hotel:
           maxItems: 2000
           minItems: 0
@@ -4858,11 +4980,11 @@ components:
           format: '20190615|20190616|W|1|297|DBT.ST|NRF-SUMMERHB|HB||1~2~0||N@9ECC4527810D418C8C9420715BEC35D01617'
           xml:
             attribute: true
-        hotelRoomRate:
-          type: string
-          xml:
-            attribute: true
-          deprecated: true
+        # hotelRoomRate:
+          # type: string
+          # xml:
+            # attribute: true
+          # deprecated: true
         rateClass:
           type: string
           description: Class of the rate.
@@ -4901,11 +5023,11 @@ components:
           description: Gross price of the room in hotelCurrency(for the pay at hotel model).
           xml:
             attribute: true
-        amount:
-          type: number
-          xml:
-            attribute: true
-          deprecated: true
+        # amount:
+          # type: number
+          # xml:
+            # attribute: true
+          # deprecated: true
         hotelCurrency:
           type: string
           description: Hotel currency(for the pay at hotel model).
@@ -4938,8 +5060,8 @@ components:
           description: Percentual share of the price corresponding to commision.
           xml:
             attribute: true
-        cost:
-          $ref: '#/components/schemas/ApiCost'
+        # cost:
+          # $ref: '#/components/schemas/ApiCost'
         rateCommentsId:
           type: string
           description: Comments associated to this rate (more information on [Hotel Content API](/documentation/hotels/content-api/api-reference/) ).
@@ -5015,14 +5137,14 @@ components:
           xml:
             attribute: true
           default: false
-        comment:
-          type: array
-          xml:
-            name: voucherComments
-            wrapped: true
-          items:
-            $ref: '#/components/schemas/ApiVoucherComment'
-          deprecated: true
+        # comment:
+          # type: array
+          # xml:
+            # name: voucherComments
+            # wrapped: true
+          # items:
+            # $ref: '#/components/schemas/ApiVoucherComment'
+          # deprecated: true
         cancellationPolicy:
           type: array
           description: List of cancellation policies on the rate.
@@ -5254,11 +5376,11 @@ components:
           format: '20190615|20190616|W|1|297|DBT.ST|NRF-SUMMERHB|HB||1~2~0||N@9ECC4527810D418C8C9420715BEC35D01617'
           xml:
             attribute: true
-        hotelRoomRate:
-          type: string
-          xml:
-            attribute: true
-          deprecated: true
+        # hotelRoomRate:
+          # type: string
+          # xml:
+            # attribute: true
+          # deprecated: true
         rateClass:
           type: string
           description: Class of the rate.
@@ -5297,11 +5419,11 @@ components:
           description: Gross price of the room in hotelCurrency(for the pay at hotel model).
           xml:
             attribute: true
-        amount:
-          type: number
-          xml:
-            attribute: true
-          deprecated: true
+        # amount:
+          # type: number
+          # xml:
+            # attribute: true
+          # deprecated: true
         hotelCurrency:
           type: string
           description: Hotel currency(for the pay at hotel model).
@@ -5334,8 +5456,8 @@ components:
           description: Percentual share of the price corresponding to commision.
           xml:
             attribute: true
-        cost:
-          $ref: '#/components/schemas/ApiCost'
+        # cost:
+          # $ref: '#/components/schemas/ApiCost'
         checkIn:
           type: string
           description: CheckIn date for the shift rate. This will always be different than the requested date or the dates of the not alternative rates.
@@ -5410,12 +5532,12 @@ components:
           description: Supplier VAT number.
           xml:
             attribute: true
-        reference:
-          type: string
-          description: Supplier reference.
-          xml:
-            attribute: true
-          deprecated: true
+        # reference:
+          # type: string
+          # description: Supplier reference.
+          # xml:
+            # attribute: true
+          # deprecated: true
     ApiTax:
       type: object
       description: Tax information.
@@ -5691,11 +5813,11 @@ components:
       type: object
       description: Request of BookingChange operation.
       properties:
-        echoToken:
-          type: string
-          xml:
-            attribute: true
-          deprecated: true
+        # echoToken:
+          # type: string
+          # xml:
+            # attribute: true
+          # deprecated: true
         bookingId:
           type: string
           xml:
@@ -5852,11 +5974,11 @@ components:
       type: object
       description: Request of CheckRate operation.
       properties:
-        echoToken:
-          type: string
-          xml:
-            attribute: true
-          deprecated: true
+        # echoToken:
+          # type: string
+          # xml:
+            # attribute: true
+          # deprecated: true
         upselling:
           type: boolean
           description: Parameter to add or remove the upSelling options node to the response.
@@ -5869,7 +5991,6 @@ components:
           xml:
             attribute: true
           default: false
-          deprecated: true
         language:
           type: string
           description: Language code that defines the language of the response. English will be used by default if this field is not informed.
