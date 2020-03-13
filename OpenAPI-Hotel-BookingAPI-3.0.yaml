@@ -3872,7 +3872,7 @@ paths:
         
         ## Push service
         
-        Additionally, we offer a push service for you to receive automatic messages each time a booking is reconfirmed. Contact our [support team](apitude@hotelbeds.com) to learn more about this feature.
+        Additionally we  offer you a PUSH notification service if you provide us a URL. Also we offer you an email notification service if you provide us an email to send the notifications. Contact our support team (apitude@hotelbeds.com) to learn more about this features.
       operationId: bookingreconfirmation
       parameters:
         - $ref: '#/components/parameters/CommonRequestHeaderAccept'
