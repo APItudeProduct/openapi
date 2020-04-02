@@ -4,18 +4,16 @@ info:
   description: |
     # APItude Hotel Content API
   
-    Hotel Content API has been designed to retrieve all the details of the hotels available in our [Hotel Booking API](/documentation/hotels/booking-api/api-reference/). 
+    Hotel Content API has been designed to retrieve **all the details** of the hotels available in our [Hotel Booking API](/documentation/hotels/booking-api/api-reference/). 
     
     Hotel Content API contains several methods that allow you to obtain the details of the hotels as well as list of destinations, countries and the master types that complement the hotels informatoin (like room type descriptions, accommodation type descriptions, categories descriptions...).
     
-    The main operation that we have is the Hotels Operation which is connected to the rest of methods, we can consider three different connections based on the information returned in each operation:
-    
-    Note that the Languages operation will be connected to all the operations in which a description is returned,since we will return the language code in which that description has been returned.
+    Note that the Languages operation is connected to all the operations in which a description is returned, since we return the language code in which that description has been returned.
   termsOfService: https://developer-beta.hotelbeds.com/api-terms-use
   contact:
     name: Apitude Support
-    url: /
-    email: apitude@hotelbeds.com
+    url: https://developer-beta.hotelbeds.com
+    email: developer-beta@hotelbeds.com
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -31,18 +29,19 @@ servers:
       description: Specification version
 tags:
 - name: Hotels
-  description: Returns static information of hotels that matches the requested parameters
+  description: 'Returns information of hotels currently existing hotels in Hotelbeds portfolio.'
 - name: Locations
-  description: Returns information of the different levels on our destination tree
+  description: 'Returns information of the different levels on our destination tree.'
 - name: Types
-  description: The types operations retrieve the different master lists needed to use with the Hotel Content API responses
+  description: 'Returns information of the the different types of elements comprised in the rest of the API responses.'
 paths:
   /hotels:
     get:
       tags:
       - Hotels
       summary: Hotels
-      description: Returns all the details associated to the Hotel.
+      description: |-
+        Returns the list of currently existing hotels in Hotelbeds portfolio.
       operationId: hotelsUsingGET
       parameters:        
       - $ref: '#/components/parameters/CommonRequestHeaderAccept'
@@ -66,7 +65,7 @@ paths:
         description: 'Filter for a specific hotel or list of hotels.'
         required: false
         style: form
-        explode: true
+        explode: false
         schema:
           type: array
           items:
@@ -89,25 +88,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiHotelsRS'
         400:
-          description: Bad Request
-          content: {}
+          $ref: '#/components/responses/400'
         401:
-          description: Unauthorized
-          content: {}
-        402:
-          description: Payment Required
-          content: {}
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
         500:
-          description: Internal Server Error
-          content: {}
+          $ref: '#/components/responses/500'
         503:
-          description: Product Exception/Service Unavailable
-          content: {}
+          $ref: '#/components/responses/503'
   /hotels/{hotelCodes}/details:
     get:
       tags:
       - Hotels
-      summary: Hotels with ID details
+      summary: |-
+        Returns all the details associated to the request hotel.
       description: Returns all the details associated to the Hotel.
       operationId: hotelWithIdDetailsUsingGET
       parameters:
@@ -133,20 +128,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiHotelDetailsRS'
         400:
-          description: Bad Request
-          content: {}
+          $ref: '#/components/responses/400'
         401:
-          description: Unauthorized
-          content: {}
-        402:
-          description: Payment Required
-          content: {}
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
         500:
-          description: Internal Server Error
-          content: {}
+          $ref: '#/components/responses/500'
         503:
-          description: Product Exception/Service Unavailable
-          content: {}
+          $ref: '#/components/responses/503'
   # /hotels/{id}:
     # get:
       # deprecated: true
@@ -272,21 +262,21 @@ paths:
       - $ref: '#/components/parameters/CommonRequestParameterFields'
       - name: codes
         in: query
-        description: Filter to limit the results for an specific destination or list
-          of destinations
+        description: 'Filter to limit the results for an specific destination or list
+          of destinations.'
         required: false
         style: form
-        explode: true
+        explode: false
         schema:
           type: array
           items:
             type: string
       - name: countryCodes
         in: query
-        description: Filter for a specific country of list of countries.
+        description: 'Filter for a specific country of list of countries.'
         required: false
         style: form
-        explode: true
+        explode: false
         schema:
           type: array
           items:
@@ -787,7 +777,10 @@ paths:
       tags:
       - Types
       summary: Languages
-      description: Returns the list of available languages.
+      description: |-
+        Returns the list of available languages.
+        
+        The Languages operation is connected to all the operations in which a description is returned, since we return the language code in which that description has been returned.
       operationId: languagesUsingGET
       parameters:
       - $ref: '#/components/parameters/CommonRequestHeaderAccept'
@@ -924,8 +917,7 @@ paths:
       tags:
       - Types
       summary: Rate comments
-      description: Returns the descriptions of the rate comments associated with the
-        hotel that the hotelier wants the client to read before confirming the booking.
+      description: 'Returns the descriptions of the rate comments associated with the hotel that the hotelier wants the client to read before confirming the booking.'
       operationId: rateCommentsUsingGET
       parameters:
       - $ref: '#/components/parameters/CommonRequestHeaderAccept'
@@ -986,7 +978,7 @@ paths:
           # fields use ‘all’. See the complete list of available fields in the response.
         # required: true
         # style: form
-        # explode: true
+        # explode: false
         # schema:
           # type: array
           # items:
@@ -1060,7 +1052,7 @@ paths:
           # fields use ‘all’. See the complete list of available fields in the response.
         # required: true
         # style: form
-        # explode: true
+        # explode: false
         # schema:
           # type: array
           # items:
@@ -1730,13 +1722,13 @@ components:
           description: 'List of zones in which the destination is divided.'
           items:
             $ref: '#/components/schemas/ApiZone'
-    ApiCodedElement:
-      type: object
-      properties:
-        code:
-          type: string
-        description:
-          $ref: '#/components/schemas/ApiContent'
+    # ApiCodedElement:
+      # type: object
+      # properties:
+        # code:
+          # type: string
+        # description:
+          # $ref: '#/components/schemas/ApiContent'
     ApiHotelIssue:
       type: object
       description: 'Information on an hotel issue (repair works, facilities closed,...).'
@@ -2046,8 +2038,8 @@ components:
       type: object
       description: 'Information of the hotel room.'
       properties:
-        characteristic:
-          $ref: '#/components/schemas/ApiCodedElement'
+        # characteristic:
+          # $ref: '#/components/schemas/ApiCodedElement'
         characteristicCode:
           type: string
           description: 'Characteristic code/s of the room.'
@@ -2074,8 +2066,8 @@ components:
           type: string
           description: 'Internal room type code. Returned only for Unified clients.'
           example: DBL
-        type:
-          $ref: '#/components/schemas/ApiCodedElement'
+        # type:
+          # $ref: '#/components/schemas/ApiCodedElement'
     ApiHotelTerminal:
       type: object
       description: 'Info of a terminal.'
@@ -2269,10 +2261,9 @@ components:
           type: string
           description: 'Characteristic code/s of the room.'
           example: B2-PI
-        hotel:
-          type: string
-          example:
-          deprecated: true
+        # hotel:
+          # type: string
+          # deprecated: true
         imageTypeCode:
           type: string
           description: 'Specifies where has the picture been taken (you can see the possible values in the response of types/imagetypes operation).'
@@ -2441,9 +2432,8 @@ components:
           description: 'Rate comments that apply to the rates.'
           items:
             $ref: '#/components/schemas/ApiRateComment'
-        id:
-          type: string
-          example:
+        # id:
+          # type: string
         rateCodes:
           type: array 
           description: 'Rates for which the rate comments applies.'
@@ -2477,18 +2467,18 @@ components:
           format: int32
     ApiBoard:
       type: object
-      description: 'Multilanguage description of the board.'
+      description: 'Information on a board.'
       properties:
         code:
           type: string
           description: 'Internal code of the board.'
-          example:
+          example: AI
         description:
           $ref: '#/components/schemas/ApiContent'
         multiLingualCode:
           type: string
           description: 'Multilanguage code of the board type.'
-          example:
+          example: AI
     ApiHotel:
       type: object
       description: 'Information on a hotel.'
@@ -2843,12 +2833,12 @@ components:
           type: string
           description: 'Environment where the request has been sent and processed.'
           example: [awseuwest1, awseuwest1b, ip_10_185_91_142]
-        expiration:
-          type: string
-          deprecated: true
-        internal:
-          type: string
-          deprecated: true
+        # expiration:
+          # type: string
+          # deprecated: true
+        # internal:
+          # type: string
+          # deprecated: true
         processTime:
           type: string
           description: 'Server process time in milliseconds.'
@@ -2980,34 +2970,6 @@ components:
              summary: 'The allowed throttle limit for this apiKey has been exceeded.'
              value:
               error: Quota exceeded
-    404:
-      description: |-
-        **NOT FOUND** - The requested resource could not be found. This error can be due to a temporary or permanent condition.
-      content:
-        application/xml:
-          example: |-
-            <?xml version="1.0" encoding="UTF-8"?>
-            <bookingDetailRS xmlns="http://www.hotelbeds.com/schemas/messages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://www.hotelbeds.com/schemas/messages">
-                <auditData processTime="1781" timestamp="2020-02-04 16:41:33.563" requestHost="212.66.164.13, 64.252.132.81, 10.185.84.185, 34.242.17.225" serverId="ip-10-185-89-145.eu-west-1.compute.internal.node.int-hbg-aws-eu-west-1.discovery#A+" environment="[awseuwest1, awseuwest1a, ip_10_185_89_145]" release="8813015814a189304b0f776271181c6aa778ed93" token="179B7E49376046CC982959348F9A96AC" internal="0||||0|0||||||||||||0||||0||0|c8zj99aze7hdvtaqh4qvcck4|||"/>
-                <error>
-                    <code>INVALID_DATA-179B7E49376046CC982959348F9A96AC</code>
-                    <message>Invalid data. The booking does not exist or you do not have permissions to access it.</message>
-                </error>
-            </bookingDetailRS>
-        application/json:
-          example: |-
-            auditData:
-              processTime: '3433'
-              timestamp: '2020-02-04 16:40:22.169'
-              requestHost: '212.66.164.13, 64.252.132.73, 10.185.83.195, 34.242.17.225'
-              serverId: 'ip-10-185-89-145.eu-west-1.compute.internal.node.int-hbg-aws-eu-west-1.discovery#A+'
-              environment: '[awseuwest1, awseuwest1a, ip_10_185_89_145]'
-              release: 8813015814a189304b0f776271181c6aa778ed93
-              token: BDDAAA250A034A1797DBFCAF56B91BE9
-              internal: 0||||0|0||||||||||||0||||0||0|c8zj99aze7hdvtaqh4qvcck4|||
-            error:
-              code: INVALID_DATA-BDDAAA250A034A1797DBFCAF56B91BE9
-              message: Invalid data. The booking does not exist or you do not have permissions to access it.
     406:
       description: |-
         **NOT ACCEPTABLE** - The resource identified by the request is only capable of generating response entities which have content characteristics not acceptable according to the accept headers sent in the request.
