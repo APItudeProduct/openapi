@@ -1465,7 +1465,7 @@ components:
         facilityName:
           type: string
           description: 'Name of the facility.'
-          example: 
+          example: 'Bar'
         indFee:
           type: boolean
           description: 'Defines if the facility has cost or not at the establishment.'
@@ -1486,11 +1486,11 @@ components:
         timeFrom:
           type: string
           description: 'Time from which the facility is available.'
-          example:
+          example: 14:00:00
         timeTo:
           type: string
           description: 'Time until which the facility is available.'
-          example:
+          example: 00:00:00
         voucher:
           type: boolean
           description: 'Indicates if the use of the facility will issue a voucher.'
@@ -2266,7 +2266,7 @@ components:
         imageTypeCode:
           type: string
           description: 'Specifies where has the picture been taken (you can see the possible values in the response of types/imagetypes operation).'
-          example:
+          example: 'RES'
         order:
           type: integer
           description: 'Order in which the images are shown in the web page.'
@@ -2712,7 +2712,6 @@ components:
         indFee:
           type: boolean
           description: 'Indicator if the facility has cost or not at the establishment.'
-          example:
         indLogic:
           type: boolean
           description: 'Indicator if the facility exists at the hotel or not.'
