@@ -39,7 +39,7 @@ paths:
     get:
       tags:
       - Hotels
-      summary: Hotels
+      summary: 'Hotels'
       description: |-
         Returns the list of currently existing hotels in Hotelbeds portfolio.
       operationId: hotelsUsingGET
@@ -101,8 +101,7 @@ paths:
     get:
       tags:
       - Hotels
-      summary: |-
-        Returns all the details associated to the request hotel.
+      summary: 'Hotel details'
       description: Returns all the details associated to the Hotel.
       operationId: hotelWithIdDetailsUsingGET
       parameters:
@@ -315,7 +314,7 @@ paths:
     get:
       tags:
       - Types
-      summary: Hotel accommodations
+      summary: 'Accommodations'
       description: Returns the list of available accommodation types.
       operationId: accommodationsUsingGET
       parameters:
@@ -566,7 +565,7 @@ paths:
     get:
       tags:
       - Types
-      summary: FacilityGroups
+      summary: Facility groups
       description: Returns the list of available facility groups.
       operationId: facilitygroupsUsingGET
       parameters:
@@ -608,7 +607,7 @@ paths:
     get:
       tags:
       - Types
-      summary: FacilityTipologies
+      summary: Facility typologies
       description: 'Returns the list of available facility typologies.Remarks: Since
         all fields are returned by default, there won''t be any field to filter.'
       operationId: facilitytypologiesUsingGET
