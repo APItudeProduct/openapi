@@ -37,7 +37,7 @@ servers:
       description: Specification version
 tags:
 - name: Availability
-  description: Check hotels and rooms available in a given time period
+  description: Search hotels and rooms available in a given time period
 - name: CheckRate
   description: Get a detailed and updated breakdown of an hotel room rate
 - name: Booking
@@ -78,7 +78,7 @@ paths:
               $ref: '#/components/schemas/availabilityRQ'
             examples:
               Ex1:  # Example 1
-                summary: Availability by hotel code list
+                summary: Search one room for two adults by hotel code list
                 description: |-
                   Search availability by hotel code list. Up to 2,000 hotel codes can be requested in one request.
                   
@@ -101,7 +101,52 @@ paths:
                     </hotels>
                   </availabilityRQ>
               Ex2:  # Example 2
-                summary: Availability by GPS coordinates
+                summary: Search one room for one adult and two children by hotel code list
+                description: |-
+                  Search availability by hotel code list. Up to 2,000 hotel codes can be requested in one request.
+                  
+                  Hotel codes can be obtained from [Hotel Content API](/documentation/hotels/content-api/api-reference/).
+                value: |-
+                  <?xml version="1.0" encoding="UTF-8"?>
+                  <availabilityRQ xmlns="http://www.hotelbeds.com/schemas/messages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <stay checkIn="2020-06-15" checkOut="2020-06-16"/>
+                    <occupancies>
+                  		<occupancy rooms="1" adults="1" children="2">
+                  			<paxes>
+                  				<pax type="CH" age="8"/>
+                  				<pax type="CH" age="10"/>
+                  			</paxes>
+                  		</occupancy>
+                  	</occupancies>
+                    <hotels>
+                      <hotel>77</hotel>
+                      <hotel>168</hotel>
+                      <hotel>264</hotel>
+                      <hotel>265</hotel>
+                      <hotel>265</hotel>
+                      <hotel>297</hotel>
+                      <hotel>311</hotel>
+                    </hotels>
+                  </availabilityRQ>
+              Ex3:  # Example 3
+                summary: Search two rooms for two adults each by GPS coordinates
+                description: |-
+                  Search availability based on geolocation coordinates. You can do it by either using a circular or a rectangular area: 
+                  
+                  * __Circle__: you must specify longitude and latitude as the center of the circle, radius and unit (km or mi) will determine the area size.
+                  
+                  * __Rectangle__: you must specify longitude and latitude as the top left corner, secondaryLongitude and secondaryLatitude as the bottom right corner of the rectangle.
+                value: |-
+                  <?xml version="1.0" encoding="UTF-8"?>
+                  <availabilityRQ xmlns="http://www.hotelbeds.com/schemas/messages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <stay checkIn="2020-06-15" checkOut="2020-06-16"/>
+                    <occupancies>
+                      <occupancy rooms="2" adults="2" children="0"/>
+                    </occupancies>
+                    <geolocation latitude="39.57119" longitude="2.646633999999949" radius="20" unit="km"/>
+                  </availabilityRQ>
+              Ex4:  # Example 4
+                summary: Search one room for two adults and one room for one adult and one child by GPS coordinates
                 description: |-
                   Search availability based on geolocation coordinates. You can do it by either using a circular or a rectangular area: 
                   
@@ -114,30 +159,72 @@ paths:
                     <stay checkIn="2020-06-15" checkOut="2020-06-16"/>
                     <occupancies>
                       <occupancy rooms="1" adults="2" children="0"/>
+                      <occupancy rooms="1" adults="1" children="1">
+                        <paxes>
+                          <pax type="CH" age="2"/>
+                        </paxes>
+                      </occupancy>
                     </occupancies>
                     <geolocation latitude="39.57119" longitude="2.646633999999949" radius="20" unit="km"/>
                   </availabilityRQ>
-              Ex3:  # Example 3
-                summary: Availability by destination
+              Ex5:  # Example 5
+                summary: Filter example
                 description: |-
-                  Search availability based on destination codes from the Hotelbeds destination tree (available in [Hotel Content API](/documentation/hotels/content-api/api-reference/)).
-                
-                  **Important**: Please note that the recommended search types are by Hotel code and by GPS coordinates. Search by destination is disabled by default, to apply for activation please contact our support team.
+                  Example of Availability request with multiple filters.
                 value: |-
                   <?xml version="1.0" encoding="UTF-8"?>
                   <availabilityRQ xmlns="http://www.hotelbeds.com/schemas/messages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                    <stay checkIn="2020-06-15" checkOut="2020-06-16"/>
-                    <occupancies>
-                      <occupancy rooms="1" adults="2" children="0"/>
-                    </occupancies>
-                    <destination code="MCO"/>
+                  	<stay checkIn="2020-06-15" checkOut="2020-06-16"/>
+                  	<occupancies>
+                  		<occupancy rooms="1" adults="2" children="0"/>
+                  	</occupancies>
+                  	<hotels>
+                  		<hotel>77</hotel>
+                  		<hotel>168</hotel>
+                  		<hotel>264</hotel>
+                  		<hotel>265</hotel>
+                  		<hotel>265</hotel>
+                  		<hotel>297</hotel>
+                  		<hotel>311</hotel>
+                  	</hotels>
+                  	<rooms included="True">
+                  		<room>DBT.ST</room>
+                  	</rooms>
+                  	<keywords>
+                  		<keyword>34</keyword>
+                  		<keyword>38</keyword>
+                  		<keyword>100</keyword>
+                  	</keywords>
+                  	<accommodations>
+                  		<accommodation>HOTEL</accommodation>
+                  		<accommodation>HOSTEL</accommodation>
+                  	</accommodations>
+                  	<boards included="true">
+                  		<board>RO</board>
+                  		<board>BB</board>
+                  	</boards>
+                  	<reviews>
+                  		<review type="HOTELBEDS" maxRate="5" minRate="1" minReviewCount="3"/>
+                  	</reviews>
+                  	<filter
+                  	maxHotels="10"
+                  	minRate="100.000"
+                  	maxRate="1700.000"
+                  	minCategory="3"
+                  	maxCategory="5"
+                  	maxRooms="3"
+                  	maxRatesPerRoom="3"
+                  	paymentType="AT_HOTEL"
+                  	packaging="TRUE"
+                  	hotelPackage="YES"
+                  	contract="CG-FIT B2B"/>
                   </availabilityRQ>
           application/json:
             schema:
               $ref: '#/components/schemas/availabilityRQ'
             examples:
               Ex1:  # Example 1
-                summary: Availability by hotel code list
+                summary: Search one room for two adults by hotel code list
                 description: |-
                   Search availability by hotel code list. Up to 2,000 hotel codes can be requested in one request.
                   
@@ -159,7 +246,55 @@ paths:
                       - 297
                       - 311
               Ex2:  # Example 2
-                summary: Availability by GPS coordinates
+                summary: Search one room for one adult and two children by hotel code list
+                description: |-
+                  Search availability by hotel code list. Up to 2,000 hotel codes can be requested in one request.
+                  
+                  Hotel codes can be obtained from [Hotel Content API](/documentation/hotels/content-api/api-reference/).
+                value:
+                  stay:
+                    checkIn: '2020-06-15'
+                    checkOut: '2020-06-16'
+                  occupancies:
+                    - rooms: 1
+                      adults: 1
+                      children: 2
+                      paxes:
+                        - type: CH
+                          age: 8
+                        - type: CH
+                          age: 10
+                  hotels:
+                    hotel:
+                      - 77
+                      - 168
+                      - 264
+                      - 265
+                      - 297
+                      - 311
+              Ex3:  # Example 3
+                summary: Search two rooms for two adults each by GPS coordinates
+                description: |-
+                  Search availability based on geolocation coordinates. You can do it by either using a circular or a rectangular area: 
+                  
+                  * __Circle__: you must specify longitude and latitude as the center of the circle, radius and unit (km or mi) will determine the area size.
+                  
+                  * __Rectangle__: you must specify longitude and latitude as the top left corner, secondaryLongitude and secondaryLatitude as the bottom right corner of the rectangle.
+                value:
+                  stay:
+                    checkIn: '2020-06-15'
+                    checkOut: '2020-06-16'
+                  occupancies:
+                    - rooms: 2
+                      adults: 2
+                      children: 0
+                  geolocation:
+                    latitude: 39.57119
+                    longitude: 2.646633999999949
+                    radius: 20
+                    unit: km
+              Ex4:  # Example 4
+                summary: Search one room for two adults and one room for one adult and one child by GPS coordinates
                 description: |-
                   Search availability based on geolocation coordinates. You can do it by either using a circular or a rectangular area: 
                   
@@ -172,29 +307,72 @@ paths:
                     checkOut: '2020-06-16'
                   occupancies:
                     - rooms: 1
-                      adults: 1
+                      adults: 2
                       children: 0
+                    - rooms: 1
+                      adults: 1
+                      children: 1
+                      paxes:
+                        - type: CH
+                          age: 2
                   geolocation:
                     latitude: 39.57119
                     longitude: 2.646633999999949
                     radius: 20
                     unit: km
-              Ex3:  # Example 3
-                summary: Availability by destination
+              Ex5:  # Example 5
+                summary: Filter example
                 description: |-
-                  Search availability based on destination codes from the Hotelbeds destination tree (available in [Hotel Content API](/documentation/hotels/content-api/api-reference/)).
-                
-                  **Important**: Please note that the recommended search types are by Hotel code and by GPS coordinates. Search by destination is disabled by default, to apply for activation please contact our support team.
+                  Example of Availability request with multiple filters.
                 value:
                   stay:
                     checkIn: '2020-06-15'
                     checkOut: '2020-06-16'
                   occupancies:
                     - rooms: 1
-                      adults: 1
+                      adults: 2
                       children: 0
-                  destination:
-                    code: MCO
+                  hotels:
+                    hotel:
+                      - 77
+                      - 168
+                      - 264
+                      - 265
+                      - 297
+                      - 311
+                  rooms:
+                    included: true
+                    room:
+                      - DBT.ST
+                  keywords:
+                    keyword:
+                      - 34
+                      - 38
+                      - 100
+                  accommodations:
+                    - HOTEL
+                    - HOSTEL
+                  boards:
+                    included: true
+                    board:
+                      - RO
+                      - BB
+                  reviews:
+                    - type: HOTELBEDS
+                      maxRate: 5
+                      minRate: 1
+                      minReviewCount: 3
+                  filter:
+                    minRate: 100
+                    maxRate: 1700
+                    minCategory: 3
+                    maxCategory: 5
+                    maxRooms: 3
+                    maxRatesPerRoom: 3
+                    paymentType: AT_HOTEL
+                    packaging: true
+                    hotelPackage: 'YES'
+                    contract: CG-FIT B2B
         required: true
       responses:
         200:
@@ -5987,12 +6165,12 @@ components:
           xml:
             attribute: true
           default: false
-        expandCXL:
-          type: boolean
-          description: Parameter to add more details on Cancellation Policies.
-          xml:
-            attribute: true
-          default: false
+        # expandCXL:
+          # type: boolean
+          # description: Parameter to add more details on Cancellation Policies.
+          # xml:
+            # attribute: true
+          # default: false
         language:
           type: string
           description: Language code that defines the language of the response. English will be used by default if this field is not informed.
