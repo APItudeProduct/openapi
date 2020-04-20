@@ -81,10 +81,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiHotelsRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiHotelsRS'
         400:
@@ -120,10 +120,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiHotelDetailsRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiHotelDetailsRS'
         400:
@@ -175,10 +175,10 @@ paths:
         # 200:
           # description: OK
           # content:
-            # application/xml:
+            # application/json:
               # schema:
                 # $ref: '#/components/schemas/ApiHotelsRS'
-            # application/json:
+            # application/xml:
               # schema:
                 # $ref: '#/components/schemas/ApiHotelsRS'
         # 400:
@@ -220,10 +220,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiCountriesRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiCountriesRS'
         400:
@@ -289,10 +289,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiDestinationsRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiDestinationsRS'
         400:
@@ -331,10 +331,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiAccommodationsRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiAccommodationsRS'
         400:
@@ -373,10 +373,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiBoardsRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiBoardsRS'
         400:
@@ -415,10 +415,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiCategoriesRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiCategoriesRS'
         400:
@@ -457,10 +457,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiChainsRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiChainsRS'
         400:
@@ -499,10 +499,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiCurrenciesRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiCurrenciesRS'
         400:
@@ -540,10 +540,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiFacilitiesRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiFacilitiesRS'
         400:
@@ -582,10 +582,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiFacilityGroupsRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiFacilityGroupsRS'
         400:
@@ -625,10 +625,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiFacilityTypologiesRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiFacilityTypologiesRS'
         400:
@@ -667,10 +667,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiGroupCategoriesRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiGroupCategoriesRS'
         400:
@@ -709,10 +709,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiImageTypesRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiImageTypesRS'
         400:
@@ -750,10 +750,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiIssuesRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiIssuesRS'
         400:
@@ -794,10 +794,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiLanguagesRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiLanguagesRS'
         400:
@@ -836,10 +836,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiPromotionsRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiPromotionsRS'
         400:
@@ -890,10 +890,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiRateCommentDetailsRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiRateCommentDetailsRS'
         400:
@@ -931,10 +931,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiRateCommentsRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiRateCommentsRS'
         400:
@@ -1010,10 +1010,10 @@ paths:
         # 200:
           # description: OK
           # content:
-            # application/xml:
+            # application/json:
               # schema:
                 # $ref: '#/components/schemas/ApiRateCommentsRS'
-            # application/json:
+            # application/xml:
               # schema:
                 # $ref: '#/components/schemas/ApiRateCommentsRS'
         # 400:
@@ -1096,10 +1096,10 @@ paths:
         # 200:
           # description: OK
           # content:
-            # application/xml:
+            # application/json:
               # schema:
                 # $ref: '#/components/schemas/ApiRateCommentDetailsRS'
-            # application/json:
+            # application/xml:
               # schema:
                 # $ref: '#/components/schemas/ApiRateCommentDetailsRS'
         # 400:
@@ -1138,10 +1138,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiRoomsRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiRoomsRS'
         400:
@@ -1180,10 +1180,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiSegmentsRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiSegmentsRS'
         400:
@@ -1222,10 +1222,10 @@ paths:
         200:
           description: OK
           content:
-            application/xml:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ApiTerminalsRS'
-            application/json:
+            application/xml:
               schema:
                 $ref: '#/components/schemas/ApiTerminalsRS'
         400:
@@ -1248,11 +1248,11 @@ components:
     CommonRequestHeaderAccept:
       name: Accept
       in: header
-      description: 'Response format, posible values are application/xml and application/json.'
+      description: 'Response format, posible values are application/json and application/xml.'
       required: true
       schema:
         type: string
-        enum: [application/json, application/xml]
+        enum: [application/xml, application/json]
     CommonRequestHeaderAcceptEncoding:
       name: Accept-Encoding
       in: header
@@ -2919,7 +2919,7 @@ components:
 
         *INVALID_DATA* - The JSON or XML syntax is correct, however some of the fields contain incorrect data. Please check the documentation for the allowed values and follow the message returned in order to fix this error.
       content:
-        application/xml:
+        application/json:
           example: |-
             <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
             <hotelDetailsRS xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.hotelbeds.com/schemas/messages">
@@ -2929,7 +2929,7 @@ components:
                     <message>The request is not compliant with the specified version of the API. Failed to convert value of type 'java.lang.String' to required type 'java.util.List'; nested exception is java.lang.NumberFormatException: For input string: "a"</message>
                 </error>
             </hotelDetailsRS>
-        application/json:
+        application/xml:
           example: |-
             auditData:
               timestamp: '2020-03-10 12:15:26.243'
@@ -2944,7 +2944,7 @@ components:
       description: |-
         **UNAUTHORIZED** - Authentication has failed or has not been provided.
       content:
-        application/json:
+        application/xml:
           examples:
             Ex1:
              summary: 'The X-Signature parameter is incorrect. Please make sure your apiKey - secret are correct and your system clock is set correctly.'
@@ -2958,7 +2958,7 @@ components:
       description: |-
         **FORBIDDEN** - The credentials are correct and authorization was succesful, but access to this resource/operation is not allowed.
       content:
-        application/json:
+        application/xml:
           examples:
             Ex1:
              summary: 'The apiKey does not allow access to this operation/path.'
@@ -2972,14 +2972,14 @@ components:
       description: |-
         **NOT ACCEPTABLE** - The resource identified by the request is only capable of generating response entities which have content characteristics not acceptable according to the accept headers sent in the request.
       content:
-        application/xml:
+        application/json:
           example:
             no body
     415:
       description: |-
-        **UNSUPPORTED MEDIA TYPE** - Use the Content-Type header to set application/json and be sure the format of your payload matches the format
+        **UNSUPPORTED MEDIA TYPE** - Use the Content-Type header to set application/xml or application/json and be sure the format of your payload matches the format
       content:
-        application/xml:
+        application/json:
           example:
             no body
     429:
@@ -3002,7 +3002,7 @@ components:
         
         * *This apikey is not associated with a valid client*: This means that the provided apiKey belongs to an inactive client/agency. If you need information regarding the cause for this please contact our support team at [apitude@hotelbeds.com]().
       content:
-        application/xml:
+        application/json:
           example: |-
                 <?xml version="1.0" encoding="UTF-8"?>
                 <bookingRS xmlns="http://www.hotelbeds.com/schemas/messages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://www.hotelbeds.com/schemas/messages">
@@ -3012,7 +3012,7 @@ components:
                         <message>Internal server error</message>
                     </error>
                 </bookingRS>
-        application/json:
+        application/xml:
           example:
             auditData:
               processTime: '664'
