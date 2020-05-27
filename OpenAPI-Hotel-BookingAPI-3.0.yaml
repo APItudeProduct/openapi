@@ -4196,7 +4196,7 @@ paths:
         * [Push Service](/documentation/hotels/booking-api/reconfirmation-service/push-service/) : The messages will be automatically sent in JSON format to an endpoint of your choice.
         * [Email Service](/documentation/hotels/booking-api/reconfirmation-service/email-service/): The messages will be automatically sent in an email to an address of your choice.
         
-        Contact our [apitude@hotelbeds.com](support team) to learn more about this features.
+        Contact our support team at [apitude@hotelbeds.com]() to learn more about this features.
       operationId: bookingreconfirmation
       parameters:
         - $ref: '#/components/parameters/CommonRequestHeaderAccept'
