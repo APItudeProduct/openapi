@@ -4180,7 +4180,7 @@ paths:
       description: |-
         The Reconfirmation operation allows to retrieve the reconfirmation numbers (The confirmation number of the Hotel, both for the Hotelbeds product and for that of external suppliers product) of the bookings made by the client when requested in a GET call to our endpoint.
         
-        Obtaining this reconfirmation numbers from hoteliers is an __asynchronous__ service: **reconfirmation numbers are not available at the time of the booking**, and as such they can't be informed at the time of the booking, thus the need for this operation.
+        Obtaining this reconfirmation numbers from hoteliers is an __asynchronous__ service: **reconfirmation numbers are not available at the time of the booking**, and as such they can't be informed at the time of the booking, hence the need for this operation.
 
         The Reconfirmation operation offers a wide variety of filters to help narrowing down reconfirmation number results. Only one filter can be used at the same time. Below the four possible filters you can use:
         
