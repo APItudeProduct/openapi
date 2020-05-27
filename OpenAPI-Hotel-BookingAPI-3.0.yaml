@@ -4179,6 +4179,8 @@ paths:
       summary: Booking reconfirmation
       description: |-
         The Reconfirmation operation allows to retrieve the reconfirmation numbers (The confirmation number of the Hotel, both for the Hotelbeds product and for that of external suppliers product) of the bookings made by the client when requested in a GET call to our endpoint.
+        
+        Obtaining this reconfirmation numbers from hoteliers is an __asynchronous__ service: **reconfirmation numbers are not available at the time of the booking**, and as such they can't be informed at the time of the booking, thus the need for this operation.
 
         The Reconfirmation operation offers a wide variety of filters to help narrowing down reconfirmation number results. Only one filter can be used at the same time. Below the four possible filters you can use:
         
@@ -4187,9 +4189,14 @@ paths:
         * list of clientReference ids
         * list of booking Ids
         
-        ## Push service
+        ## Reconfirmation Service
         
-        Additionally we  offer you a PUSH notification service if you provide us a URL. Also we offer you an email notification service if you provide us an email to send the notifications. Contact our support team (apitude@hotelbeds.com) to learn more about this features.
+        Additionally we offer you the capacity to receive the reconfirmation numbers automatically in our reconformation service, designed to automatically send you the reconfirmation information as soon as is available from the hoteliers in two different ways:
+        
+        * [Push Service](/documentation/hotels/booking-api/reconfirmation-service/push-service/) : The messages will be automatically sent in JSON format to an endpoint of your choice.
+        * [Email Service](/documentation/hotels/booking-api/reconfirmation-service/email-service/): The messages will be automatically sent in an email to an address of your choice.
+        
+        Contact our [apitude@hotelbeds.com](support team) to learn more about this features.
       operationId: bookingreconfirmation
       parameters:
         - $ref: '#/components/parameters/CommonRequestHeaderAccept'
@@ -6578,4 +6585,4 @@ components:
       in: header
 security:
   - Apikey: []
-    XSignature:  []
+    Xsignature:  []
