@@ -4933,11 +4933,11 @@ components:
           # xml:
             # attribute: true
           # deprecated: true
-        bookingId:
-          type: string
-          xml:
-            attribute: true
-          deprecated: true
+        # bookingId:
+          # type: string
+          # xml:
+            # attribute: true
+          # deprecated: true
         mode:
           type: string
           description: Defines if the operation will be a simulation or an actual modification.
