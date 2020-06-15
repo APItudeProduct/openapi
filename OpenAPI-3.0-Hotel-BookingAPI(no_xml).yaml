@@ -3794,7 +3794,7 @@ components:
             wrapped: true
           items:
             $ref: '#/components/schemas/ApiReview'
-        room:
+        rooms:
           type: array
           xml:
             name: rooms
@@ -3831,7 +3831,7 @@ components:
           format: date
           xml:
             attribute: true
-        hotel:
+        hotels:
           type: array
           description: Information regarding the hotels.
           items:
@@ -4260,7 +4260,7 @@ components:
           # items:
             # $ref: '#/components/schemas/ApiVoucherComment'
           # deprecated: true
-        cancellationPolicy:
+        cancellationPolicies:
           type: array
           description: List of cancellation policies on the rate.
           xml:
@@ -5189,7 +5189,7 @@ components:
             wrapped: true
           items:
             $ref: '#/components/schemas/ApiPax'
-        rate:
+        rates:
           type: array
           description: List of rates associated to the room.
           xml: 
