@@ -3257,7 +3257,7 @@ components:
           xml:
             attribute: true
           enum:
-          - PRECONFIRMED
+          # - PRECONFIRMED
           - CONFIRMED
           - CANCELLED
         modificationPolicies:
@@ -5155,7 +5155,7 @@ components:
             attribute: true
           enum:
           - NEW
-          - PRECONFIRMED
+          # - PRECONFIRMED
           - CONFIRMED
           - TO_BE_UPDATED
           - CANCELLED
