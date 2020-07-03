@@ -4694,7 +4694,7 @@ components:
             attribute: true
         clientCurrency:
           type: string
-          description: Client configured currency in case the currency of the hotel is different from the client currency.
+          description: Client configured currency.
           xml:
             attribute: true
     ApiTaxes:
