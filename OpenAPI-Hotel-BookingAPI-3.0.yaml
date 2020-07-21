@@ -2698,7 +2698,7 @@ paths:
                   clientReference: IntegrationAgency
                   remark: Booking remarks are to be written here.
                   tolerance: 2
-                  ç:
+                  paymentData:
                     paymentCard:
                       cardHolderName: CardHolderName
                       cardType: VI
@@ -4863,6 +4863,11 @@ components:
           xml:
             attribute: true
     ApiBillingAddress:
+      required:
+        - address1
+        - city
+        - postalCode
+        - countryCode
       type: object
       description: The billing address for the payment.
       properties:
@@ -5724,6 +5729,12 @@ components:
           xml:
             attribute: true
     ApiPaymentCard:
+      required:
+          - cardType
+          - cardNumber
+          - cardHolderName
+          - expiryDate
+          - cardCVC
       type: object
       description: Credit card information.
       properties:
@@ -5745,6 +5756,9 @@ components:
           type: string
           description: CVC security code of the credit card.
     ApiPaymentContactData:
+      required:
+        - email
+        - phoneNumber
       type: object
       description: Contact data for billing.
       properties:
