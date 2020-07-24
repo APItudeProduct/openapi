@@ -4438,7 +4438,7 @@ paths:
         - Booking
       summary: Booking cancellation
       description: >-
-        BookingCancellation is used either to simulate a booking or to perform
+        BookingCancellation is used either to simulate a cancellation or to perform
         the actual cancellation.Cancellations always take into account day and
         time of the destination in order to calculate what cancellation policy
         should be applied.
